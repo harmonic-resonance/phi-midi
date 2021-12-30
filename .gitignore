@@ -1,0 +1,6 @@
+*.mp4
+out/
+tags
+tags.lock
+logs/*.log
+__pycache__/
