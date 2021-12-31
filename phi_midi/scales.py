@@ -1,3 +1,5 @@
+'''utils for building scales'''
+
 SCALES = {
     'major': (2, 2, 1, 2, 2, 2, 1),
     'minor': (2, 1, 2, 2, 1, 2, 2),
@@ -24,3 +26,15 @@ SCALES = {
     'aeolian': (2, 1, 2, 2, 1, 2, 2),
     'locrian': (1, 2, 2, 1, 2, 2, 2),
 }
+
+def build_scale(root=48, scale_type='major', octaves=3):
+    notes = [root]
+    scale = SCALES[scale_type]
+    for octave in range(octaves):
+        jump = 0
+        for interval in scale:
+            jump += interval
+            note = (octave * 12) + root + jump
+            notes.append(note)
+    return notes
+        
