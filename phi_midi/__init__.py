@@ -1,6 +1,8 @@
 from mido import Message, MidiFile, MidiTrack, MetaMessage
 from phi_midi.scales import *
 from phi_midi.chords import *
+from phi_midi.voices import *
+from phi_midi.percussion import *
 
 
 
@@ -22,6 +24,11 @@ def set_new_track(mf, name='', instrument=''):
 def set_note(track, note=60, channel=0, velocity=64, duration=480):
     track.append(Message('note_on', note=note, channel=channel, velocity=velocity, time=0))
     track.append(Message('note_off', note=note, channel=channel, velocity=127, time=duration))
+    
+def set_note_on(track, note=60, channel=0, velocity=64, duration=480):
+    track.append(Message('note_on', note=note, channel=channel, velocity=velocity, time=0))
+    track.append(Message('note_on', note=0, channel=channel, velocity=velocity, time=0))
+    track.append(Message('note_off', note=0, channel=channel, velocity=127, time=duration))
     
 def set_chord(track, root=60, chord=CHORDS['Major'], channel=0, velocity=64, duration=480):
     for offset in chord:
