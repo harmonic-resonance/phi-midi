@@ -1,19 +1,17 @@
 import phi_midi as pm
 import math as math
+import subprocess as subprocess
 
 n = 144
 root = 48
-octaves = 4
+octaves = 3
 scale_type = 'dorian'
-# scale_type = 'pentatonicmajor'
-scale_type = 'harmonicminor'
+scale_type = 'pentatonicmajor'
+#  scale_type = 'harmonicminor'
 # scale_type = 'ionian'
 # scale_type = 'bluesmajor'
 tempo=250000*4
 pulse=120
-
-phi = (1 + math.sqrt(5)) / 2
-angle = (2 * math.pi) / phi
 
 scale = pm.build_scale(
     root=root, 
@@ -34,8 +32,8 @@ v1 = pm.add_voice_track(mf, name='Mixed Choir')
 v2 = pm.add_voice_track(mf, name='Swell Choir')
 
 
-
-
+phi = (1 + math.sqrt(5)) / 2
+angle = (2 * math.pi) / phi
 angles = []
 
 print('phi:', phi)
@@ -64,9 +62,17 @@ def get_pan(x):
 notes = list(map(get_note, sins))
 pans = list(map(get_pan, coss))
 
+offsets = [1, 1, 2, 3, 5, 8] #, 13, 21, 34, 55]
+offsets = list(reversed(offsets))
+
+pm.add_voice_note(v1, 0, duration=pulse*13)
+pm.add_voice_note(v2, 0, duration=pulse*21)
 for i, note in enumerate(notes):
     vibes.append(pm.Message('control_change', control=10, value=pans[i], time=0))
-    pm.set_note(vibes, note, duration=pulse)
+    offset = 0
+    if i < len(offsets):
+      offset = offsets[i] * pulse
+    pm.set_note(vibes, note, duration=offset+pulse)
     if i % 21 == 13:
         pm.add_voice_note(v1, note, duration=pulse*21)
     if i % 34 == 21:
@@ -77,14 +83,17 @@ for i, note in enumerate(notes):
 gongs = int(n / octaves)
 gong_gap = octaves * pulse
 
-root -= 12
+#  root -= 12
 
-for i in range(gongs):
-    if i > gongs/phi:
-        pm.set_note(gong, root, channel=1, duration=gong_gap)
-    else:
-        pm.set_note(gong, root-12, channel=1, duration=gong_gap)
+#  for i in range(gongs):
+    #  if i > gongs/phi:
+        #  pm.set_note(gong, root+12, channel=1, duration=gong_gap)
+    #  else:
+        #  pm.set_note(gong, root, channel=1, duration=gong_gap)
 
-mf.save(filename)
+filepath = f'out/{filename}'
+mf.save(filepath)
 
-!timidity -c voices.cfg $filename
+#  !timidity -c voices.cfg $filename
+subprocess.run(["timidity", filepath, "-c", "voices.cfg", '-OF'])
+subprocess.run(["timidity", "-c", "voices.cfg", filepath])
