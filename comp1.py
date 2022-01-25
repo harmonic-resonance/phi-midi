@@ -2,14 +2,9 @@ import phi_midi as pm
 import math as math
 import subprocess as subprocess
 
-n = 144
 root = 48
 octaves = 3
-scale_type = 'dorian'
 scale_type = 'pentatonicmajor'
-#  scale_type = 'harmonicminor'
-# scale_type = 'ionian'
-# scale_type = 'bluesmajor'
 tempo=250000*4
 pulse=120
 
