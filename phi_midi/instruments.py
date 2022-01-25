@@ -1,19 +1,44 @@
 """
 wrapper for managing instruments
 """
+import phi_midi as pm
 
-class Instrument:
+class Instrument():
 
     """Docstring for Instrument. """
 
-    def __init__(self, name, channel):
+    def __init__(self, mf, name, channel):
         """TODO: to be defined. """
-
+        inst_id = pm.INSTRUMENTS.index(name)
+        self.name = name
+        self.instrument = inst_id
+        self.channel = channel
         
+        self.track = pm.set_new_track(mf, name=name)
+        self.track.append(pm.Message('program_change', channel=channel, program=inst_id, time=0))
 
-    def note_on(note, duration):
-        pass
+        self.track_volume = pm.set_new_track(mf, name=f'{name}-volume')
 
+
+    def set_volume(self, level, duration):
+        self.track_volume.append(pm.Message('control_change', channel=self.channel, control=7, value=level, time=duration))
+
+    def set_note(self, note, duration, velocity=64):
+        self.track.append(pm.Message('note_on', note=note, channel=self.channel, velocity=velocity, time=0))
+        self.track.append(pm.Message('note_off', note=note, channel=self.channel, velocity=127, time=duration))
+
+    def set_rest(self, duration):
+        self.track.append(pm.Message('note_off', note=0, channel=self.channel, velocity=127, time=duration))
+
+    def set_chord(self, root, duration, chord=pm.CHORDS['Major'], velocity=64):
+        for offset in chord:
+            self.track.append(pm.Message('note_on', note=root+offset, channel=self.channel, velocity=velocity, time=0))
+        for offset in chord:
+            if offset == 0:
+                time = duration
+            else:
+                time = 0
+            self.track.append(pm.Message('note_off', note=root+offset, channel=self.channel, velocity=127, time=time))
 
 '''
 https://gist.github.com/devxpy/063968e0a2ef9b6db0bd6af8079dad2a

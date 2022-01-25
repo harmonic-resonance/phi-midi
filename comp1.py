@@ -6,88 +6,76 @@ root = 48
 octaves = 3
 scale_type = 'pentatonicmajor'
 tempo=250000*4
-pulse=120
 
 scale = pm.build_scale(
     root=root, 
     scale_type=scale_type, 
     octaves=octaves)
 
-filename = f'{scale_type}-{n}-{octaves}.mid'
+filename = f'comp1.mid'
 mf = pm.new_midi(title=filename)
 mf.tracks[0].append(pm.MetaMessage('set_tempo', tempo=tempo, time=0))
 
-vibes = pm.set_new_track(mf, name='vibes')
-vibes.append(pm.Message('program_change', program=11, time=0))
+vb = pm.Instrument(mf, "Vibraphone", 1)
+vb.set_note(60, 480)
+vb.set_note(64, 480)
+vb.set_note(67, 960)
 
-gong = pm.set_new_track(mf, name='gong')
-gong.append(pm.Message('program_change', program=32, channel=1, time=0))
+vb.set_note(60, 480)
+vb.set_rest(480)
+vb.set_note(67, 960)
 
-v1 = pm.add_voice_track(mf, name='Mixed Choir')
-v2 = pm.add_voice_track(mf, name='Swell Choir')
+vb.set_note(60, 480)
+vb.set_rest(480)
+vb.set_note(67, 960)
 
+vb.set_chord(60, 960)
+vb.set_chord(65, 960)
+vb.set_chord(60, 960)
+vb.set_chord(65, 960)
+vb.set_chord(60, 960)
+vb.set_chord(65, 960)
+vb.set_chord(67, 1920)
 
-phi = (1 + math.sqrt(5)) / 2
-angle = (2 * math.pi) / phi
-angles = []
+#  vb.set_volume(30, 0)
+#  for i in range(10,128):
+    #  vb.set_volume(i, 30)
 
-print('phi:', phi)
-print('angle:', angle)
-print('scale:', scale)
+bass = pm.Instrument(mf, 'Acoustic Bass', 2)
+bass.set_rest(1920)
+bass.set_rest(1920)
+bass.set_rest(1920)
 
-for i in range(n):
-    theta = angle * i
-    angles.append(theta)
-    
-sins = list(map(lambda x: math.sin(x), angles))
-coss = list(map(lambda x: math.cos(x), angles))
+bass.set_note(48, 480)
+bass.set_note(48, 240)
+bass.set_note(55, 240)
+bass.set_rest(960)
 
-def get_note(x):
-    '''range -1 to 1'''
-    divs = len(scale)
-    i = int((x+1)/2 * divs)
-    return scale[i]
-    
-def get_pan(x):
-    '''range -1 to 1'''
-    divs = 127
-    i = int((x+1)/2 * divs)
-    return i
-    
-notes = list(map(get_note, sins))
-pans = list(map(get_pan, coss))
+bass.set_note(48, 480)
+bass.set_note(48, 240)
+bass.set_note(55, 240)
+bass.set_rest(960)
 
-offsets = [1, 1, 2, 3, 5, 8] #, 13, 21, 34, 55]
-offsets = list(reversed(offsets))
+bass.set_note(48, 480)
+bass.set_note(48, 240)
+bass.set_note(55, 240)
+bass.set_rest(960)
 
-pm.add_voice_note(v1, 0, duration=pulse*13)
-pm.add_voice_note(v2, 0, duration=pulse*21)
-for i, note in enumerate(notes):
-    vibes.append(pm.Message('control_change', control=10, value=pans[i], time=0))
-    offset = 0
-    if i < len(offsets):
-      offset = offsets[i] * pulse
-    pm.set_note(vibes, note, duration=offset+pulse)
-    if i % 21 == 13:
-        pm.add_voice_note(v1, note, duration=pulse*21)
-    if i % 34 == 21:
-        pm.add_voice_note(v2, note, duration=pulse*34)
-        # pm.add_voice_chord(v1, 60, duration=1920*2, chord=pm.CHORDS['Major7'])
+bass.set_note(48, 480)
+bass.set_note(57, 240)
+bass.set_note(57, 240)
+bass.set_note(48, 480)
+bass.set_note(57, 240)
+bass.set_note(57, 240)
 
+#  v1 = pm.add_voice_track(mf, name='Mixed Choir')
+#  v2 = pm.add_voice_track(mf, name='Swell Choir')
 
-gongs = int(n / octaves)
-gong_gap = octaves * pulse
-
-#  root -= 12
-
-#  for i in range(gongs):
-    #  if i > gongs/phi:
-        #  pm.set_note(gong, root+12, channel=1, duration=gong_gap)
-    #  else:
-        #  pm.set_note(gong, root, channel=1, duration=gong_gap)
 
 filepath = f'out/{filename}'
 mf.save(filepath)
+
+mf.print_tracks()
 
 #  !timidity -c voices.cfg $filename
 subprocess.run(["timidity", filepath, "-c", "voices.cfg", '-OF'])

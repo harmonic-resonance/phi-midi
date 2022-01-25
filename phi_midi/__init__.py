@@ -3,7 +3,7 @@ from phi_midi.scales import *
 from phi_midi.chords import *
 from phi_midi.voices import *
 from phi_midi.percussion import *
-
+from phi_midi.instruments import *
 
 
 def new_midi(title=''):
