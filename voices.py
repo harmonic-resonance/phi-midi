@@ -1,3 +1,9 @@
+'''
+voices are contained in the KBH_Real_and_Swell_Choir.sf2 soundfont
+
+timidity requires voices.cfg file to establish voices on bank 1
+'''
+
 import phimidi as pm
 import subprocess as subprocess
 
