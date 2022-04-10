@@ -1,4 +1,6 @@
-'''utils for building chords'''
+'''utils for building chords
+TODO: alternate voicings
+'''
 
 CHORDS = {
   'Major': [0, 4, 7],

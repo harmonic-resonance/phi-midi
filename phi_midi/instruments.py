@@ -18,17 +18,16 @@ class Instrument():
         self.track.append(pm.Message('program_change', channel=channel, program=inst_id, time=0))
 
         self.track_volume = pm.set_new_track(mf, name=f'{name}-volume')
+        self.track_reverb = pm.set_new_track(mf, name=f'{name}-reverb')
+        self.track_chorus = pm.set_new_track(mf, name=f'{name}-chorus')
 
 
-    def set_volume(self, level, duration):
-        self.track_volume.append(pm.Message('control_change', channel=self.channel, control=7, value=level, time=duration))
+    def set_rest(self, duration):
+        self.track.append(pm.Message('note_off', note=0, channel=self.channel, velocity=127, time=duration))
 
     def set_note(self, note, duration, velocity=64):
         self.track.append(pm.Message('note_on', note=note, channel=self.channel, velocity=velocity, time=0))
         self.track.append(pm.Message('note_off', note=note, channel=self.channel, velocity=127, time=duration))
-
-    def set_rest(self, duration):
-        self.track.append(pm.Message('note_off', note=0, channel=self.channel, velocity=127, time=duration))
 
     def set_chord(self, root, duration, chord=pm.CHORDS['Major'], velocity=64):
         for offset in chord:
@@ -39,6 +38,15 @@ class Instrument():
             else:
                 time = 0
             self.track.append(pm.Message('note_off', note=root+offset, channel=self.channel, velocity=127, time=time))
+
+    def set_volume(self, level, duration):
+        self.track_volume.append(pm.Message('control_change', channel=self.channel, control=7, value=level, time=duration))
+
+    def set_reverb(self, level, duration):
+        self.track_reverb.append(pm.Message('control_change', channel=self.channel, control=91, value=level, time=duration))
+        
+    def set_chorus(self, level, duration):
+        self.track_chorus.append(pm.Message('control_change', channel=self.channel, control=93, value=level, time=duration))
 
 '''
 https://gist.github.com/devxpy/063968e0a2ef9b6db0bd6af8079dad2a
@@ -174,44 +182,3 @@ INSTRUMENTS = [
     'Applause',
     'Gunshot'
 ]
-NOTES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
-OCTAVES = list(range(11))
-NOTES_IN_OCTAVE = len(NOTES)
-
-errors = {
-    'program': 'Bad input, please refer this spec-\n'
-               'http://www.electronics.dit.ie/staff/tscarff/Music_technology/midi/program_change.htm',
-    'notes': 'Bad input, please refer this spec-\n'
-             'http://www.electronics.dit.ie/staff/tscarff/Music_technology/midi/midi_note_numbers_for_octaves.htm'
-}
-
-
-def instrument_to_program(instrument: str) -> int:
-    assert instrument in INSTRUMENTS, errors['program']
-    return INSTRUMENTS.index(instrument) + 1
-
-
-def program_to_instrument(program: int) ->  str:
-    assert 1 <= program <= 128, errors['program']
-    return INSTRUMENTS[program - 1]
-
-
-def number_to_note(number: int) -> tuple:
-    octave = number // NOTES_IN_OCTAVE
-    assert octave in OCTAVES, errors['notes']
-    assert 0 <= number <= 127, errors['notes']
-    note = NOTES[number % NOTES_IN_OCTAVE]
-
-    return note, octave
-
-
-def note_to_number(note: str, octave: int) -> int:
-    assert note in NOTES, errors['notes']
-    assert octave in OCTAVES, errors['notes']
-
-    note = NOTES.index(note)
-    note += (NOTES_IN_OCTAVE * octave)
-
-    assert 0 <= note <= 127, errors['notes']
-
-    return note
