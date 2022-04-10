@@ -1,4 +1,4 @@
-import phi_midi as pm
+import phimidi as pm
 import math as math
 import subprocess as subprocess
 
@@ -19,14 +19,10 @@ snare.append(pm.Message('program_change', channel=9, time=0))
 tick = pm.set_new_track(mf, name='tick')
 tick.append(pm.Message('program_change', channel=9, time=0))
 
-
-
 kicks = 8
 
-#  root -= 12
-
 for i in range(kicks):
-    pm.set_note(kick, 35, channel=9, duration=480)
+    pm.set_note(kick, 35, channel=9, velocity=64, duration=480)
     if i > 1:
         for _ in range(4):
             pm.set_note(snare, 38, channel=9, velocity=30, duration=120)
@@ -36,8 +32,6 @@ for i in range(kicks):
         pm.set_note(snare, 0, channel=9, duration=480)
         pm.set_note(tick, 0, channel=9, duration=480)
         
-
-
 
 filepath = f'out/{filename}'
 mf.save(filepath)
