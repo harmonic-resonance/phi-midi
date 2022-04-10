@@ -5,8 +5,11 @@ import subprocess as subprocess
 tempo=250000*4
 pulse=120
 
+PROJECT = 'phi-midi'
+NAME = 'drums'
 
-filename = f'drums.mid'
+folder = f'{PROJECT}/{NAME}'
+filename = f'{NAME}.mid'
 mf = pm.new_midi(title=filename)
 mf.tracks[0].append(pm.MetaMessage('set_tempo', tempo=tempo, time=0))
 
@@ -32,8 +35,16 @@ for i in range(kicks):
         pm.set_note(snare, 0, channel=9, duration=480)
         pm.set_note(tick, 0, channel=9, duration=480)
         
+def save_midi(mf, folder, filename):
+    import os
+    sessions = os.path.expanduser('~') + '/Sessions'
+    out = f'{sessions}/{folder}/'
+    os.makedirs(out, exist_ok=True)
+    filepath = out + filename
+    mf.save(filepath)
+    print(f'    * {filepath}')
+    return filepath
 
-filepath = f'out/{filename}'
-mf.save(filepath)
+filepath = save_midi(mf, folder, filename)
 
 subprocess.run(["timidity", filepath])
