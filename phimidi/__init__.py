@@ -41,3 +41,13 @@ def set_chord(track, root=60, chord=CHORDS['Major'], channel=0, velocity=64, dur
             time = 0
         track.append(Message('note_off', note=root+offset, channel=channel, velocity=127, time=time))
     
+def save_midi(mf, folder, filename):
+    import os
+    sessions = os.path.expanduser('~') + '/Sessions'
+    out = f'{sessions}/{folder}/'
+    os.makedirs(out, exist_ok=True)
+    filepath = out + filename
+    mf.save(filepath)
+    print(f'    * {filepath}')
+    return filepath
+

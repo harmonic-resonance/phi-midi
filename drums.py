@@ -10,7 +10,8 @@ NAME = 'drums'
 
 folder = f'{PROJECT}/{NAME}'
 filename = f'{NAME}.mid'
-mf = pm.new_midi(title=filename)
+
+mf = pm.new_midi(title=f'{PROJECT} • {NAME}')
 mf.tracks[0].append(pm.MetaMessage('set_tempo', tempo=tempo, time=0))
 
 kick = pm.set_new_track(mf, name='kick')
@@ -25,7 +26,6 @@ tick.append(pm.Message('program_change', channel=9, time=0))
 kicks = 8
 
 for i in range(kicks):
-    pm.set_note(kick, 35, channel=9, velocity=64, duration=480)
     if i > 1:
         for _ in range(4):
             pm.set_note(snare, 38, channel=9, velocity=30, duration=120)
@@ -34,17 +34,8 @@ for i in range(kicks):
     else:
         pm.set_note(snare, 0, channel=9, duration=480)
         pm.set_note(tick, 0, channel=9, duration=480)
+    pm.set_note(kick, 35, channel=9, velocity=100, duration=480)
         
-def save_midi(mf, folder, filename):
-    import os
-    sessions = os.path.expanduser('~') + '/Sessions'
-    out = f'{sessions}/{folder}/'
-    os.makedirs(out, exist_ok=True)
-    filepath = out + filename
-    mf.save(filepath)
-    print(f'    * {filepath}')
-    return filepath
-
-filepath = save_midi(mf, folder, filename)
+filepath = pm.save_midi(mf, folder, filename)
 
 subprocess.run(["timidity", filepath])

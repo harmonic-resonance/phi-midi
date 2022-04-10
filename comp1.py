@@ -1,4 +1,4 @@
-import phi_midi as pm
+import phimidi as pm
 import math as math
 import subprocess as subprocess
 
@@ -12,12 +12,18 @@ scale = pm.build_scale(
     scale_type=scale_type, 
     octaves=octaves)
 
-filename = f'comp1.mid'
-mf = pm.new_midi(title=filename)
+PROJECT = 'phi-midi'
+NAME = 'comp1'
+
+folder = f'{PROJECT}/{NAME}'
+filename = f'{NAME}.mid'
+title = f'{PROJECT} - {NAME}'
+
+mf = pm.new_midi(title=title)
 mf.tracks[0].append(pm.MetaMessage('set_tempo', tempo=tempo, time=0))
 
-vb = pm.Instrument(mf, "Violin", 1)
-#  vb = pm.Instrument(mf, "Vibraphone", 1)
+#  vb = pm.Instrument(mf, "Violin", 1)
+vb = pm.Instrument(mf, "Vibraphone", 1)
 #  vb.track.append(pm.Message('control_change', channel=1, control=65, value=127, time=0))
 #  vb.track.append(pm.Message('control_change', channel=1, control=84, value=127, time=0))
 vb.set_chorus(0, 0)
@@ -83,8 +89,7 @@ bass.set_rest(960)
 #  v2 = pm.add_voice_track(mf, name='Swell Choir')
 
 
-filepath = f'out/{filename}'
-mf.save(filepath)
+filepath = pm.save_midi(mf, folder, filename)
 
 mf.print_tracks()
 
