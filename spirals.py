@@ -1,4 +1,4 @@
-import phi_midi as pm
+import phimidi as pm
 import math as math
 import subprocess as subprocess
 
@@ -18,19 +18,20 @@ scale = pm.build_scale(
     scale_type=scale_type, 
     octaves=octaves)
 
+PROJECT = 'phi-midi'
+NAME = 'spirals'
 filename = f'{scale_type}-{n}-{octaves}.mid'
-mf = pm.new_midi(title=filename)
-mf.tracks[0].append(pm.MetaMessage('set_tempo', tempo=tempo, time=0))
 
-vibes = pm.set_new_track(mf, name='vibes')
-vibes.append(pm.Message('program_change', program=11, time=0))
+folder = f'{PROJECT}/{NAME}'
+title = f'{PROJECT} - {NAME}'
 
-gong = pm.set_new_track(mf, name='gong')
-gong.append(pm.Message('program_change', program=32, channel=1, time=0))
+filename = f'{scale_type}-{n}-{octaves}.mid'
+mf = pm.new_midi(title=filename, tempo=tempo)
 
-v1 = pm.add_voice_track(mf, name='Mixed Choir')
-v2 = pm.add_voice_track(mf, name='Swell Choir')
-
+vibes = pm.Instrument(mf, pm.I.vibraphone, 1)
+bass = pm.Instrument(mf, pm.I.acoustic_bass, 2)
+v1 = pm.Voice(mf, voice_name=pm.V.choir_ooh)
+v2 = pm.Voice(mf, voice_name=pm.V.choir_aah)
 
 phi = (1 + math.sqrt(5)) / 2
 angle = (2 * math.pi) / phi
@@ -65,35 +66,23 @@ pans = list(map(get_pan, coss))
 offsets = [1, 1, 2, 3, 5, 8] #, 13, 21, 34, 55]
 offsets = list(reversed(offsets))
 
-pm.add_voice_note(v1, 0, duration=pulse*13)
-pm.add_voice_note(v2, 0, duration=pulse*21)
+v1.set_rest(pulse*13)
+v2.set_rest(pulse*21)
+
 for i, note in enumerate(notes):
-    vibes.append(pm.Message('control_change', control=10, value=pans[i], time=0))
+    #  vibes.append(pm.Message('control_change', control=10, value=pans[i], time=0))
     offset = 0
     if i < len(offsets):
       offset = offsets[i] * pulse
-    pm.set_note(vibes, note, duration=offset+pulse)
+    vibes.set_note(note, duration=offset+pulse)
     if i % 21 == 13:
-        pm.add_voice_note(v1, note, duration=pulse*21)
+        v1.set_note(note, duration=pulse*21)
     if i % 34 == 21:
-        pm.add_voice_note(v2, note, duration=pulse*34)
-        # pm.add_voice_chord(v1, 60, duration=1920*2, chord=pm.CHORDS['Major7'])
+        v2.set_note(note, duration=pulse*34)
 
+filepath = pm.save_midi(mf, folder, filename)
 
-gongs = int(n / octaves)
-gong_gap = octaves * pulse
+mf.print_tracks()
 
-#  root -= 12
-
-#  for i in range(gongs):
-    #  if i > gongs/phi:
-        #  pm.set_note(gong, root+12, channel=1, duration=gong_gap)
-    #  else:
-        #  pm.set_note(gong, root, channel=1, duration=gong_gap)
-
-filepath = f'out/{filename}'
-mf.save(filepath)
-
-#  !timidity -c voices.cfg $filename
 subprocess.run(["timidity", filepath, "-c", "voices.cfg", '-OF'])
 subprocess.run(["timidity", "-c", "voices.cfg", filepath])
