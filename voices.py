@@ -11,30 +11,25 @@ import subprocess as subprocess
 PROJECT = 'phi-midi'
 NAME = 'voices'
 
+M = 1920
+
 folder = f'{PROJECT}/{NAME}'
 filename = f'{NAME}.mid'
 title = f'{PROJECT} - {NAME}'
 
 mf = pm.new_midi(title=title)
    
+solo_ooh = pm.Voice(mf, voice_name='Solo Ooh')
 
-v1 = pm.add_voice_track(mf, name='Solo Ooh')
-v2 = pm.add_voice_track(mf, name='Swell Choir')
+#  solo_ooh.set_note(72, duration=M)
 
-pm.add_voice_note(v1, 72, duration=1920)
-pm.add_voice_note(v1, 70, duration=1920)
+swell = pm.Voice(mf, voice_name=pm.V.choir_mixed)
+#  swell.set_rest(M)
+swell.set_chord(60, M*2, chord_type=pm.C.major)
+swell.set_chord(67, M*2, chord_type=pm.C.major_7)
+swell.set_chord(64, M*2, chord_type=pm.C.major_7)
+swell.set_chord(60, M*2, chord_type=pm.C.sus2)
 
-pm.add_voice_chord(v1, 60, duration=1920*2, chord=pm.CHORDS['Major7'])
-
-pm.add_voice_note(v2, 0, duration=1920*3)
-pm.add_voice_note(v2, 72, duration=1920)
-pm.add_voice_chord(v2, 60, duration=1920*2, chord=pm.CHORDS['Sus2'])
-pm.add_voice_note(v2, 69, duration=1920)
-
-
-#  mf.save('voices.mid')
-
-#  !timidity -c voices.cfg voices.mid
 filepath = pm.save_midi(mf, folder, filename)
 
 mf.print_tracks()

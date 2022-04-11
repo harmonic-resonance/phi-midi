@@ -10,31 +10,27 @@ NAME = 'drums'
 
 folder = f'{PROJECT}/{NAME}'
 filename = f'{NAME}.mid'
+title = f'{PROJECT} - {NAME}'
 
-mf = pm.new_midi(title=f'{PROJECT} • {NAME}')
-mf.tracks[0].append(pm.MetaMessage('set_tempo', tempo=tempo, time=0))
+mf = pm.new_midi(title=title, tempo=tempo)
+#  mf.tracks[0].append(pm.MetaMessage('set_tempo', tempo=tempo, time=0))
 
-kick = pm.set_new_track(mf, name='kick')
-kick.append(pm.Message('program_change', channel=9, time=0))
-
-snare = pm.set_new_track(mf, name='snare')
-snare.append(pm.Message('program_change', channel=9, time=0))
-
-tick = pm.set_new_track(mf, name='tick')
-tick.append(pm.Message('program_change', channel=9, time=0))
+kick = pm.Percussion(mf, pm.P.acoustic_bass_drum)
+snare = pm.Percussion(mf, pm.P.acoustic_snare)
+tick = pm.Percussion(mf, pm.P.side_stick)
 
 kicks = 8
 
 for i in range(kicks):
+    kick.set_hit(480, velocity=100)
     if i > 1:
         for _ in range(4):
-            pm.set_note(snare, 38, channel=9, velocity=30, duration=120)
+            snare.set_hit(120, velocity=40)
         for _ in range(12):
-            pm.set_note(tick, 37, channel=9, velocity=30, duration=40)
+            tick.set_hit(40, velocity=20)
     else:
-        pm.set_note(snare, 0, channel=9, duration=480)
-        pm.set_note(tick, 0, channel=9, duration=480)
-    pm.set_note(kick, 35, channel=9, velocity=100, duration=480)
+        snare.set_rest(480)
+        tick.set_rest(480)
         
 filepath = pm.save_midi(mf, folder, filename)
 

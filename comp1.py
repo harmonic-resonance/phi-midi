@@ -23,7 +23,7 @@ mf = pm.new_midi(title=title)
 mf.tracks[0].append(pm.MetaMessage('set_tempo', tempo=tempo, time=0))
 
 #  vb = pm.Instrument(mf, "Violin", 1)
-vb = pm.Instrument(mf, "Vibraphone", 1)
+vb = pm.Instrument(mf, pm.I.vibraphone, 1)
 #  vb.track.append(pm.Message('control_change', channel=1, control=65, value=127, time=0))
 #  vb.track.append(pm.Message('control_change', channel=1, control=84, value=127, time=0))
 vb.set_chorus(0, 0)
@@ -58,7 +58,7 @@ vb.set_chord(67, 1920)
 #  for i in range(10,128):
     #  vb.set_volume(i, 30)
 
-bass = pm.Instrument(mf, 'Acoustic Bass', 2)
+bass = pm.Instrument(mf, pm.I.acoustic_bass, 2)
 bass.set_rest(1920)
 bass.set_rest(1920)
 bass.set_rest(1920)

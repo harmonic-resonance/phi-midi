@@ -1,6 +1,14 @@
 '''utils for building chords
 TODO: alternate voicings
 '''
+major = 'Major'
+major_7 = 'Major7'
+dominant_7 = 'Dominant7'
+minor = 'Minor'
+minor_7 = 'Minor7'
+diminished = 'Diminished'
+sus2 = 'Sus2'
+sus4 = 'Sus4'
 
 CHORDS = {
   'Major': [0, 4, 7],
