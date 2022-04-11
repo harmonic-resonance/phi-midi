@@ -19,16 +19,43 @@ title = f'{PROJECT} - {NAME}'
 
 mf = pm.new_midi(title=title)
    
-solo_ooh = pm.Voice(mf, voice_name='Solo Ooh')
+solo_ooh = pm.Voice(mf, voice_name=pm.V.solo_ooh)
+solo_aah = pm.Voice(mf, voice_name=pm.V.solo_aah)
+choir_aah = pm.Voice(mf, voice_name=pm.V.choir_aah)
+choir_ooh = pm.Voice(mf, voice_name=pm.V.choir_ooh)
+choir_mixed = pm.Voice(mf, voice_name=pm.V.choir_mixed)
+choir_swell = pm.Voice(mf, voice_name=pm.V.choir_swell)
+choir_little_swell = pm.Voice(mf, voice_name=pm.V.choir_little_swell)
 
-#  solo_ooh.set_note(72, duration=M)
+solo_ooh.set_note(pm.N.C5, M)
+solo_ooh.set_rest(M)
 
-swell = pm.Voice(mf, voice_name=pm.V.choir_mixed)
-#  swell.set_rest(M)
-swell.set_chord(60, M*2, chord_type=pm.C.major)
-swell.set_chord(67, M*2, chord_type=pm.C.major_7)
-swell.set_chord(64, M*2, chord_type=pm.C.major_7)
-swell.set_chord(60, M*2, chord_type=pm.C.sus2)
+solo_aah.set_rest(M)
+solo_aah.set_note(pm.N.C5, M)
+
+choir_ooh.set_rest(2 * M)
+choir_aah.set_rest(2 * M)
+choir_ooh.set_note(pm.N.C5, M)
+choir_ooh.set_rest(M)
+choir_aah.set_rest(M)
+choir_aah.set_note(pm.N.C5, M)
+choir_ooh.set_note(pm.N.C5, M, velocity=100)
+choir_ooh.set_rest(M)
+choir_aah.set_rest(M)
+choir_aah.set_note(pm.N.C5, M, velocity=100)
+
+choir_little_swell.set_rest(6 * M)
+choir_swell.set_rest(6 * M)
+choir_little_swell.set_note(pm.N.C5, M)
+choir_swell.set_rest(M)
+choir_little_swell.set_rest(M)
+choir_swell.set_note(pm.N.C5, M)
+
+choir_mixed.set_rest(8 * M)
+choir_mixed.set_chord(pm.N.C4, M*2, chord_type=pm.C.major)
+choir_mixed.set_chord(pm.N.G4, M*2, chord_type=pm.C.major_7)
+choir_mixed.set_chord(pm.N.F4, M*2, chord_type=pm.C.major_7)
+choir_mixed.set_chord(pm.N.C4, M*2, chord_type=pm.C.sus2)
 
 filepath = pm.save_midi(mf, folder, filename)
 
