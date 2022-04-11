@@ -21,18 +21,30 @@ class Percussion():
 
 
     def set_rest(self, duration):
+        duration = int(duration)
         self.track.append(pm.Message('note_off', note=0, channel=self.channel, velocity=127, time=duration))
 
     def set_hit(self, duration, velocity=64):
+        duration = int(duration)
         self.track.append(pm.Message('note_on', note=self.instrument, channel=self.channel, velocity=velocity, time=0))
         self.track.append(pm.Message('note_off', note=self.instrument, channel=self.channel, velocity=127, time=duration))
 
-
     def set_volume(self, level, duration):
+        duration = int(duration)
         self.track_volume.append(pm.Message('control_change', channel=self.channel, control=7, value=level, time=duration))
 
+    def set_pan(self, level, duration):
+        duration = int(duration)
+        self.track_volume.append(pm.Message('control_change', channel=self.channel, control=10, value=level, time=duration))
+
+    def set_balance(self, level, duration):
+        duration = int(duration)
+        self.track_volume.append(pm.Message('control_change', channel=self.channel, control=8, value=level, time=duration))
+
     def set_reverb(self, level, duration):
+        duration = int(duration)
         self.track_reverb.append(pm.Message('control_change', channel=self.channel, control=91, value=level, time=duration))
         
     def set_chorus(self, level, duration):
+        duration = int(duration)
         self.track_chorus.append(pm.Message('control_change', channel=self.channel, control=93, value=level, time=duration))

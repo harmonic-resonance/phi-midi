@@ -1,10 +1,10 @@
-from mido import Message, MidiFile, MidiTrack, MetaMessage
+from mido import Message, MidiFile, MidiTrack, MetaMessage, bpm2tempo
 from phimidi.scales import *
-import phimidi.chords as C
+from phimidi.chords import *
 from phimidi.voices import *
 from phimidi.percussions import *
 from phimidi.instruments import *
-from phimidi.notes import *
+import phimidi.notes as N
 
 
 def new_midi(title='', tempo=500000):
@@ -24,15 +24,18 @@ def set_new_track(mf, name='', instrument=''):
     return track
 
 def set_note(track, note=60, channel=0, velocity=64, duration=480):
+    duration = int(duration)
     track.append(Message('note_on', note=note, channel=channel, velocity=velocity, time=0))
     track.append(Message('note_off', note=note, channel=channel, velocity=127, time=duration))
     
 def set_note_on(track, note=60, channel=0, velocity=64, duration=480):
+    duration = int(duration)
     track.append(Message('note_on', note=note, channel=channel, velocity=velocity, time=0))
     track.append(Message('note_on', note=0, channel=channel, velocity=velocity, time=0))
     track.append(Message('note_off', note=0, channel=channel, velocity=127, time=duration))
     
-def set_chord(track, root=60, chord_type=pm.C.major, channel=0, velocity=64, duration=480):
+def set_chord(track, root=60, chord_type=C.major, channel=0, velocity=64, duration=480):
+    duration = int(duration)
     chord = pm.C.CHORDS[chord_type]
     for offset in chord:
         track.append(Message('note_on', note=root+offset, channel=channel, velocity=velocity, time=0))

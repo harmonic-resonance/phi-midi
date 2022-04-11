@@ -1,4 +1,28 @@
-'''utils for building scales'''
+
+major = 'major'
+minor = 'minor'
+melodic_minor = 'melodicminor'
+harmonic_minor = 'harmonicminor'
+pentatonic_major = 'pentatonicmajor'
+blues_major = 'bluesmajor'
+pentatonic_minor = 'pentatonicminor'
+blues_minor = 'bluesminor'
+augmented = 'augmented'
+diminished = 'diminished'
+chromatic = 'chromatic'
+whole_half = 'wholehalf'
+half_whole = 'halfwhole'
+whole_tone = 'wholetone'
+augmented_fifth = 'augmentedfifth'
+japanese = 'japanese'
+oriental = 'oriental'
+ionian = 'ionian'
+dorian = 'dorian'
+phrygian = 'phrygian'
+lydian = 'lydian'
+mixolydian = 'mixolydian'
+aeolian = 'aeolian'
+locrian = 'locrian'
 
 SCALES = {
     'major': (2, 2, 1, 2, 2, 2, 1),
@@ -26,15 +50,3 @@ SCALES = {
     'aeolian': (2, 1, 2, 2, 1, 2, 2),
     'locrian': (1, 2, 2, 1, 2, 2, 2),
 }
-
-def build_scale(root=48, scale_type='major', octaves=3):
-    notes = [root]
-    scale = SCALES[scale_type]
-    for octave in range(octaves):
-        jump = 0
-        for interval in scale:
-            jump += interval
-            note = (octave * 12) + root + jump
-            notes.append(note)
-    return notes
-        

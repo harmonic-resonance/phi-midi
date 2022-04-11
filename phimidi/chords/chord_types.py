@@ -1,4 +1,4 @@
-'''utils for building chords
+'''utils for building chords`
 TODO: alternate voicings
 '''
 major = 'Major'

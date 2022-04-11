@@ -2,10 +2,11 @@ import phimidi as pm
 import math as math
 import subprocess as subprocess
 
-root = 48
+root = pm.N.C3
 octaves = 3
-scale_type = 'pentatonicmajor'
-tempo=250000*4
+scale_type = pm.S.pentatonic_major
+tempo = int(pm.bpm2tempo(120))
+M = 1920
 
 scale = pm.build_scale(
     root=root, 
@@ -19,80 +20,64 @@ folder = f'{PROJECT}/{NAME}'
 filename = f'{NAME}.mid'
 title = f'{PROJECT} - {NAME}'
 
-mf = pm.new_midi(title=title)
-mf.tracks[0].append(pm.MetaMessage('set_tempo', tempo=tempo, time=0))
+mf = pm.new_midi(title=title, tempo=tempo)
 
-#  vb = pm.Instrument(mf, "Violin", 1)
-vb = pm.Instrument(mf, pm.I.vibraphone, 1)
-#  vb.track.append(pm.Message('control_change', channel=1, control=65, value=127, time=0))
-#  vb.track.append(pm.Message('control_change', channel=1, control=84, value=127, time=0))
-vb.set_chorus(0, 0)
-vb.set_note(60, 480)
-vb.set_note(64, 480)
-vb.set_note(67, 960)
-
-vb.set_chorus(64, 1920)
-vb.set_note(60, 480)
-vb.set_note(64, 480)
-vb.set_note(67, 960)
-
-vb.set_chorus(127, 1920)
-vb.set_note(60, 480)
-vb.set_note(64, 480)
-vb.set_note(67, 960)
-
-vb.set_chorus(0, 1920)
-vb.set_chord(60, 960)
-vb.set_chord(65, 960)
-
-vb.set_chorus(64, 1920)
-vb.set_chord(60, 960)
-vb.set_chord(65, 960)
-
-vb.set_chorus(127, 1920)
-vb.set_chord(60, 960)
-vb.set_chord(65, 960)
-vb.set_chord(67, 1920)
-
-#  vb.set_volume(30, 0)
-#  for i in range(10,128):
-    #  vb.set_volume(i, 30)
-
+vibes = pm.Instrument(mf, pm.I.vibraphone, 1)
 bass = pm.Instrument(mf, pm.I.acoustic_bass, 2)
-bass.set_rest(1920)
-bass.set_rest(1920)
-bass.set_rest(1920)
 
-bass.set_note(48, 480)
-bass.set_note(48, 240)
-bass.set_note(55, 240)
-bass.set_rest(960)
+vibes.set_note(pm.N.C4, M/4)
+vibes.set_note(pm.N.E4, M/4)
+vibes.set_note(pm.N.G4, M/2)
 
-bass.set_note(48, 480)
-bass.set_note(48, 240)
-bass.set_note(55, 240)
-bass.set_rest(960)
+vibes.set_note(pm.N.C4, M/4)
+vibes.set_note(pm.N.E4, M/4)
+vibes.set_note(pm.N.G4, M/2)
 
-bass.set_note(48, 480)
-bass.set_note(48, 240)
-bass.set_note(55, 240)
-bass.set_rest(960)
+vibes.set_note(pm.N.C4, M/4)
+vibes.set_note(pm.N.E4, M/4)
+vibes.set_note(pm.N.G4, M/2)
 
-#  bass.set_note(48, 480)
-#  bass.set_note(57, 240)
-#  bass.set_note(57, 240)
-#  bass.set_note(48, 480)
-#  bass.set_note(57, 240)
-#  bass.set_note(57, 240)
+vibes.set_chord(pm.N.C4, M/2)
+vibes.set_chord(pm.N.F4, M/2)
 
-#  v1 = pm.add_voice_track(mf, name='Mixed Choir')
-#  v2 = pm.add_voice_track(mf, name='Swell Choir')
+vibes.set_chord(pm.N.C4, M/2)
+vibes.set_chord(pm.N.F4, M/2)
 
+vibes.set_chord(pm.N.C4, M/2)
+vibes.set_chord(pm.N.F4, M/2)
+vibes.set_chord(pm.N.G4, M)
+
+#  vibes.set_volume(30, 0)
+#  for i in range(10,128):
+    #  vibes.set_volume(i, 30)
+
+bass.set_rest(3 * M)
+
+bass.set_note(pm.N.C3, M/4)
+bass.set_note(pm.N.C3, M/8)
+bass.set_note(pm.N.G3, M/8)
+bass.set_rest(M/2)
+
+bass.set_note(pm.N.C3, M/4)
+bass.set_note(pm.N.C3, M/8)
+bass.set_note(pm.N.G3, M/8)
+bass.set_rest(M/2)
+
+bass.set_note(pm.N.C3, M/4)
+bass.set_note(pm.N.C3, M/8)
+bass.set_note(pm.N.G3, M/8)
+bass.set_rest(M/2)
+
+#  bass.set_note(pm.N.C3, M/4)
+#  bass.set_note(57, M/8)
+#  bass.set_note(57, M/8)
+#  bass.set_note(pm.N.C3, M/4)
+#  bass.set_note(57, M/8)
+#  bass.set_note(57, M/8)
 
 filepath = pm.save_midi(mf, folder, filename)
 
 mf.print_tracks()
 
-#  !timidity -c voices.cfg $filename
 subprocess.run(["timidity", filepath, "-c", "voices.cfg", '-OF'])
 subprocess.run(["timidity", "-c", "voices.cfg", filepath])

@@ -5,11 +5,9 @@ import subprocess as subprocess
 n = 144
 root = 48
 octaves = 3
-scale_type = 'dorian'
-scale_type = 'pentatonicmajor'
-#  scale_type = 'harmonicminor'
-# scale_type = 'ionian'
-# scale_type = 'bluesmajor'
+scale_type = pm.S.dorian
+scale_type = pm.S.pentatonic_major
+
 tempo=250000*4
 pulse=120
 
@@ -70,7 +68,7 @@ v1.set_rest(pulse*13)
 v2.set_rest(pulse*21)
 
 for i, note in enumerate(notes):
-    #  vibes.append(pm.Message('control_change', control=10, value=pans[i], time=0))
+    vibes.set_pan(pans[i], 0)
     offset = 0
     if i < len(offsets):
       offset = offsets[i] * pulse
