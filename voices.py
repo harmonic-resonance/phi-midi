@@ -3,21 +3,31 @@ voices are contained in the KBH_Real_and_Swell_Choir.sf2 soundfont
 
 timidity requires voices.cfg file to establish voices on bank 1
 '''
-
 import phimidi as pm
 import subprocess as subprocess
 
-
 PROJECT = 'phi-midi'
 NAME = 'voices'
-
-M = 1920
 
 folder = f'{PROJECT}/{NAME}'
 filename = f'{NAME}.mid'
 title = f'{PROJECT} - {NAME}'
 
-mf = pm.new_midi(title=title)
+bpm = 120
+tempo = int(pm.bpm2tempo(bpm))
+
+root = pm.N.D3
+octaves = 3
+scale_type = pm.S.dorian
+
+scale = pm.build_scale(
+    root=root, 
+    scale_type=scale_type, 
+    octaves=octaves)
+
+mf = pm.new_midi(title=title, tempo=tempo)
+M = 4 * mf.ticks_per_beat
+
    
 solo_ooh = pm.Voice(mf, voice_name=pm.V.solo_ooh)
 solo_aah = pm.Voice(mf, voice_name=pm.V.solo_aah)

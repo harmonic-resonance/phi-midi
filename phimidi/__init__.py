@@ -1,4 +1,5 @@
-from mido import Message, MidiFile, MidiTrack, MetaMessage, bpm2tempo
+#  from mido import *
+from mido import MidiFile, Message, MetaMessage, bpm2tempo, second2tick
 from phimidi.scales import *
 from phimidi.chords import *
 from phimidi.voices import *

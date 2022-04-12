@@ -2,17 +2,6 @@ import phimidi as pm
 import math as math
 import subprocess as subprocess
 
-root = pm.N.D3
-octaves = 3
-scale_type = pm.S.dorian
-tempo = int(pm.bpm2tempo(120))
-M = 1920
-
-scale = pm.build_scale(
-    root=root, 
-    scale_type=scale_type, 
-    octaves=octaves)
-
 PROJECT = 'phi-midi'
 NAME = 'band'
 
@@ -20,7 +9,20 @@ folder = f'{PROJECT}/{NAME}'
 filename = f'{NAME}.mid'
 title = f'{PROJECT} - {NAME}'
 
+bpm = 120
+tempo = int(pm.bpm2tempo(bpm))
+
+root = pm.N.D3
+octaves = 3
+scale_type = pm.S.dorian
+
+scale = pm.build_scale(
+    root=root, 
+    scale_type=scale_type, 
+    octaves=octaves)
+
 mf = pm.new_midi(title=title, tempo=tempo)
+M = 4 * mf.ticks_per_beat
 
 piano = pm.Instrument(mf, pm.I.acoustic_grand_piano, 0)
 vibes = pm.Instrument(mf, pm.I.vibraphone, 1)
@@ -30,10 +32,6 @@ horns = pm.Instrument(mf, pm.I.brass_section, 3)
 kick = pm.Percussion(mf, pm.P.acoustic_bass_drum)
 snare = pm.Percussion(mf, pm.P.acoustic_snare)
 tick = pm.Percussion(mf, pm.P.side_stick)
-
-#  choir_ooh = pm.Voice(mf, voice_name=pm.V.choir_ooh)
-
-#  solo_ooh.set_note(72, duration=M)
 
 swell = pm.Voice(mf, voice_name=pm.V.choir_swell)
 
