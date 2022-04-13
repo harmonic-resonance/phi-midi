@@ -5,6 +5,23 @@ import phimidi as pm
 import phimidi.percussions.percussion_types as P
 from phimidi.percussions.percussion import *
 
+def make_tick(mf):
+    return Percussion(mf, P.side_stick)
+
+def make_kick(mf):
+    return Percussion(mf, P.acoustic_bass_drum)
+
+def make_snare(mf):
+    return Percussion(mf, P.acoustic_snare)
+
+def make_hihat_closed(mf):
+    return Percussion(mf, P.closed_hi_hat)
+
+def make_ride(mf):
+    return Percussion(mf, P.ride_cymbal_1)
+
+
+
 def swing(length, kick, ride):
     length = int(length)
     b = int(length/12)

@@ -24,16 +24,17 @@ scale = pm.build_scale(
 mf = pm.new_midi(title=title, tempo=tempo)
 M = 4 * mf.ticks_per_beat
 
-piano = pm.Instrument(mf, pm.I.acoustic_grand_piano, 0)
-vibes = pm.Instrument(mf, pm.I.vibraphone, 1)
-bass = pm.Instrument(mf, pm.I.acoustic_bass, 2)
-horns = pm.Instrument(mf, pm.I.brass_section, 3)
+piano = pm.make_piano(mf, 0)
+vibes = pm.make_vibes(mf, 1)
+bass = pm.make_bass(mf, 2)
+horns = pm.make_horns(mf, 3)
+strings = pm.make_strings(mf, 4)
 
-kick = pm.Percussion(mf, pm.P.acoustic_bass_drum)
-snare = pm.Percussion(mf, pm.P.acoustic_snare)
-tick = pm.Percussion(mf, pm.P.side_stick)
+kick = pm.make_kick(mf)
+snare = pm.make_snare(mf)
+tick = pm.make_tick(mf)
 
-swell = pm.Voice(mf, voice_name=pm.V.choir_swell)
+swell = pm.make_choir_swell(mf)
 
 vibes.set_note(pm.N.C4, M/4)
 vibes.set_note(pm.N.E4, M/4)

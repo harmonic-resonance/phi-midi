@@ -29,22 +29,6 @@ mf = pm.new_midi(title=title, tempo=tempo)
 # one measure in ticks
 M = 4 * mf.ticks_per_beat
 
-   
-
-EBCsA = [
-        (pm.N.E4, M, pm.C.major),
-        (pm.N.B3, M, pm.C.major),
-        (pm.N.Cs4, M, pm.C.minor),
-        (pm.N.A3, M, pm.C.major),
-        ]
-EAGsABE = [
-        (pm.N.E4, M/2, pm.C.major),
-        (pm.N.A4, M/2, pm.C.major),
-        (pm.N.Gs4, M, pm.C.minor_7),
-        (pm.N.A4, M/2, pm.C.major),
-        (pm.N.B4, M/2, pm.C.dominant_7),
-        (pm.N.E3, M, pm.C.major),
-        ]
 p3 = []
 chord = pm.get_chord_notes(pm.N.C4, pm.C.major)
 chord.append(pm.N.C3)
@@ -112,51 +96,49 @@ p4.append(chord)
 
 #####################
 
-p5 = [
-        (pm.N.C3, M, pm.C.major),
-        (pm.N.A3, M, pm.C.dominant_7),
-        (pm.N.D3, M, pm.C.dominant_9),
-        (pm.N.G3, M, pm.C.dominant_11),
-        (pm.N.C3, M, pm.C.dominant_13),
-        ]
+main = pm.make_choir_mixed(mf)
 
-main = pm.make_choir_swell(mf)
+b = M / 4
 
-for _ in range(1):
-    for root, duration, chord_type in p5:
-        main.set_chord(root, duration, chord_type=chord_type)
-    main.set_rest(M)
 
-for _ in range(1):
-    for root, duration, chord_type in EBCsA:
-        main.set_chord(root, duration, chord_type=chord_type)
-    main.set_rest(M)
+for _ in range(2):
+    for root, beats, chord_type in pm.progressions.p5:
+        main.set_chord(root, beats * b, chord_type=chord_type)
 
-for _ in range(1):
-    for root, duration, chord_type in EAGsABE:
-        main.set_chord(root, duration, chord_type=chord_type)
-    main.set_rest(M)
+main.set_rest(M)
+
+for _ in range(2):
+    for root, beats, chord_type in pm.progressions.EBCsA:
+        main.set_chord(root, beats * b, chord_type=chord_type)
+
+main.set_rest(M)
+
+for _ in range(2):
+    for root, beats, chord_type in pm.progressions.EAGsABE:
+        main.set_chord(root, beats * b, chord_type=chord_type)
+
+main.set_rest(M)
 
 main = pm.Instrument(mf, pm.I.vibraphone, 0)
 
 r = pm.second2tick(mf.length, mf.ticks_per_beat, tempo)
 main.set_rest(r)
 
-for _ in range(1):
-    for root, duration, chord_type in p5:
-        main.set_chord(root, duration, chord_type=chord_type)
-    main.set_rest(M)
+#  for _ in range(1):
+    #  for root, duration, chord_type in p5:
+        #  main.set_chord(root, duration, chord_type=chord_type)
+    #  main.set_rest(M)
 
 
-for _ in range(1):
-    for chord in p3:
-        main.set_notes(chord, M)
-    main.set_rest(M)
+#  for _ in range(1):
+    #  for chord in p3:
+        #  main.set_notes(chord, M)
+    #  main.set_rest(M)
 
-for _ in range(1):
-    for chord in p4:
-        main.set_notes(chord, M)
-    main.set_rest(M)
+#  for _ in range(1):
+    #  for chord in p4:
+        #  main.set_notes(chord, M)
+    #  main.set_rest(M)
 
 filepath = pm.save_midi(mf, folder, filename)
 
