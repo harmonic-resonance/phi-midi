@@ -59,9 +59,9 @@ class Instrument():
 
     def set_pan(self, level, duration):
         duration = int(duration)
-        #  self.track_pan.append(pm.Message('control_change', channel=self.channel, control=10, value=level, time=duration))
+        self.track_pan.append(pm.Message('control_change', channel=self.channel, control=10, value=level, time=duration))
         # try balance - control=8
-        self.track_pan.append(pm.Message('control_change', channel=self.channel, control=8, value=level, time=duration))
+        #  self.track_pan.append(pm.Message('control_change', channel=self.channel, control=8, value=level, time=duration))
 
     #  def set_balance(self, level, duration):
         #  duration = int(duration)
