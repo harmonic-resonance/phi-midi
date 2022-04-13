@@ -15,10 +15,9 @@ tempo = pm.bpm2tempo(pulse)
 mf = pm.new_midi(title=title, tempo=tempo)
 M = 4 * mf.ticks_per_beat
 
-
+tick = pm.Percussion(mf, pm.P.side_stick)
 kick = pm.Percussion(mf, pm.P.acoustic_bass_drum)
 snare = pm.Percussion(mf, pm.P.acoustic_snare)
-tick = pm.Percussion(mf, pm.P.side_stick)
 hihat_closed = pm.Percussion(mf, pm.P.closed_hi_hat)
 ride = pm.Percussion(mf, pm.P.ride_cymbal_1)
 
@@ -36,32 +35,47 @@ ride = pm.Percussion(mf, pm.P.ride_cymbal_1)
         #  tick.set_rest(480)
         
 # count
-for _ in range(4):
-    tick.set_hit(M/4, velocity=40)
-
 kick.set_rest(M)
 snare.set_rest(M)
 hihat_closed.set_rest(M)
+ride.set_rest(M)
+mf.tracks[0].append(pm.MetaMessage('marker', text='count', time=0))
+tick.set_hits(M, 4, velocity=40)
+
+#  ride.set_hit(M)
+#  kick.set_rest(M)
+#  kick.set_hits(4 * M, 16)
+#  ride.set_rest(M)
+#  ride.set_hits(3 * M, 24)
+
+mf.tracks[0].append(pm.MetaMessage('marker', text='billie jean', time=M))
+ride.set_rest(2 * M)
+for _ in range(2):
+    pm.billie_jean(M, kick, snare, hihat_closed)
+
+mf.tracks[0].append(pm.MetaMessage('marker', text='swing', time=2 * M))
+snare.set_rest(2 * M)
+hihat_closed.set_rest(2 * M)
 for _ in range(4):
-    kick.set_hit(M/2, velocity=100)
-    kick.set_hit(M/2, velocity=80)
-    for _ in range(2):
-        snare.set_rest(M/4)
-        snare.set_hit(M/4)
-    for _ in range(8):
-        hihat_closed.set_hit(M/8)
+    pm.swing(M, kick, ride)
+
+mf.tracks[0].append(pm.MetaMessage('marker', text='funky drummer', time=2 * M))
+for _ in range(2):
+    pm.funky_drummer(2 * M, kick, snare, hihat_closed, ride)
+
+mf.tracks[0].append(pm.MetaMessage('marker', text='deep_house', time=4 * M))
+for _ in range(2):
+    pm.deep_house(2 * M, kick, snare, hihat_closed, ride)
+    pm.deep_house(2 * M, ride, kick, snare, hihat_closed)
 
 
-ride.set_rest(5 * M)
-for _ in range(8):
-    kick.set_hit(5 * M/12)
-    kick.set_hit(M/12)
-    #  kick.set_rest(M/4)
-    ride.set_hit(M/4)
-    ride.set_hit(M/6)
-    ride.set_hit(M/12)
+mf.tracks[0].append(pm.MetaMessage('marker', text='jungle', time=8 * M))
+for _ in range(2):
+    pm.jungle(2 * M, kick, snare, hihat_closed, ride)
 
-ride.set_hit(M)
+mf.tracks[0].append(pm.MetaMessage('marker', text='drum_bass', time=4 * M))
+for _ in range(4):
+    pm.drum_bass(2 * M, kick, snare, hihat_closed, ride)
 
 filepath = pm.save_midi(mf, folder, filename)
 

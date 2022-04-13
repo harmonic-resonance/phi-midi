@@ -7,7 +7,7 @@ import phimidi as pm
 import subprocess as subprocess
 
 PROJECT = 'phi-midi'
-NAME = 'voices'
+NAME = 'arps2'
 
 folder = f'{PROJECT}/{NAME}'
 filename = f'{NAME}.mid'
@@ -17,7 +17,7 @@ bpm = 120
 tempo = int(pm.bpm2tempo(bpm))
 
 root = pm.N.D3
-octaves = 3
+octaves = 1
 scale_type = pm.S.dorian
 
 scale = pm.build_scale(
@@ -28,8 +28,6 @@ scale = pm.build_scale(
 mf = pm.new_midi(title=title, tempo=tempo)
 # one measure in ticks
 M = 4 * mf.ticks_per_beat
-
-   
 
 EBCsA = [
         (pm.N.E4, M, pm.C.major),
@@ -113,50 +111,33 @@ p4.append(chord)
 #####################
 
 p5 = [
-        (pm.N.C3, M, pm.C.major),
+        (pm.N.C4, M, pm.C.major),
         (pm.N.A3, M, pm.C.dominant_7),
         (pm.N.D3, M, pm.C.dominant_9),
         (pm.N.G3, M, pm.C.dominant_11),
         (pm.N.C3, M, pm.C.dominant_13),
         ]
 
-main = pm.make_choir_swell(mf)
+choir = pm.make_choir_swell(mf)
+vibes = pm.Instrument(mf, pm.I.vibraphone, 0)
 
-for _ in range(1):
-    for root, duration, chord_type in p5:
-        main.set_chord(root, duration, chord_type=chord_type)
-    main.set_rest(M)
 
-for _ in range(1):
-    for root, duration, chord_type in EBCsA:
-        main.set_chord(root, duration, chord_type=chord_type)
-    main.set_rest(M)
-
-for _ in range(1):
-    for root, duration, chord_type in EAGsABE:
-        main.set_chord(root, duration, chord_type=chord_type)
-    main.set_rest(M)
-
-main = pm.Instrument(mf, pm.I.vibraphone, 0)
-
-r = pm.second2tick(mf.length, mf.ticks_per_beat, tempo)
-main.set_rest(r)
-
-for _ in range(1):
-    for root, duration, chord_type in p5:
-        main.set_chord(root, duration, chord_type=chord_type)
-    main.set_rest(M)
 
 
 for _ in range(1):
     for chord in p3:
-        main.set_notes(chord, M)
-    main.set_rest(M)
+        choir.set_notes(chord, 4 * M)
 
-for _ in range(1):
-    for chord in p4:
-        main.set_notes(chord, M)
-    main.set_rest(M)
+for chord in p3:
+    for _ in range(4):
+        for i, note in enumerate(chord):
+            chord[i] = note + 12
+
+        while len(chord) < 8:
+            chord.extend(chord[0:8-len(chord)])
+
+        pm.add_arp_up(vibes, chord, M)
+
 
 filepath = pm.save_midi(mf, folder, filename)
 

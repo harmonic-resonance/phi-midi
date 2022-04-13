@@ -29,6 +29,12 @@ class Percussion():
         self.track.append(pm.Message('note_on', note=self.instrument, channel=self.channel, velocity=velocity, time=0))
         self.track.append(pm.Message('note_off', note=self.instrument, channel=self.channel, velocity=127, time=duration))
 
+    def set_hits(self, duration, divisions, velocity=64):
+        duration = int(duration/divisions)
+        for _ in range(divisions):
+            self.track.append(pm.Message('note_on', note=self.instrument, channel=self.channel, velocity=velocity, time=0))
+            self.track.append(pm.Message('note_off', note=self.instrument, channel=self.channel, velocity=127, time=duration))
+
     def set_volume(self, level, duration):
         duration = int(duration)
         self.track_volume.append(pm.Message('control_change', channel=self.channel, control=7, value=level, time=duration))
