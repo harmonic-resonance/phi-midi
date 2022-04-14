@@ -85,7 +85,7 @@ while len(chord) < 8:
 
 #  vibes = horns
 vibes = swell
-level = 40
+level = 0
 vibes.track_volume.append(pm.Message('control_change', channel=vibes.channel, control=65, value=127, time=0))
 vibes.track_volume.append(pm.Message('control_change', channel=vibes.channel, control=84, value=100, time=0))
 vibes.track_volume.append(pm.Message('control_change', channel=vibes.channel, control=5, value=level, time=0))
