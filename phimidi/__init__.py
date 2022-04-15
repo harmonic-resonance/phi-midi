@@ -1,5 +1,5 @@
 #  from mido import *
-from mido import MidiFile, Message, MetaMessage, bpm2tempo, second2tick
+from mido import MidiFile, Message, MetaMessage, bpm2tempo, second2tick, tick2second
 import phimidi.notes as N
 from phimidi.scales import *
 from phimidi.chords import *
