@@ -17,9 +17,9 @@ print()
 n = 144
 
 # relating to color cycles in plot
-cycles = 34
+cycles = 5
 
-bpm = 120
+bpm = 480
 tempo = int(pm.bpm2tempo(bpm))
 
 root =  pm.N.D3
@@ -84,15 +84,17 @@ sessions = os.path.expanduser('~') + '/Sessions'
 
 
 for cycle in range(1, cycles+1):
-    new_bpm = bpm
 
     folder = f'{PROJECT}/{NAME}/{cycle:04}'
     title = f'{PROJECT} - {NAME}'
 
     filename = f'{scale_type}-{n}-{cycle:04}.mid'
+
+    new_bpm = bpm
     tempo = int(pm.bpm2tempo(bpm))
     mf = pm.new_midi(title=filename, tempo=tempo)
-    beat=mf.ticks_per_beat
+    beat = mf.ticks_per_beat
+    #  mf.tracks[0].append(pm.MetaMessage('set_tempo', tempo=tempo, time=beat))
 
     vibes = pm.make_vibes(mf, 1)
     bass = pm.make_bass(mf, 2)
@@ -135,10 +137,11 @@ for cycle in range(1, cycles+1):
             if n_id in offsets:
                 d = n_id * beat
 
-                new_bpm = bpm + (4 * n_id)
-                new_bpm += n_id
-                tempo = int(pm.bpm2tempo(new_bpm))
-                mf.tracks[0].append(pm.MetaMessage('set_tempo', tempo=tempo, time=d))
+                #  new_bpm = bpm + (4 * n_id)
+                #  new_bpm += 4 * n_id
+                #  tempo = int(pm.bpm2tempo(new_bpm))
+                #  mf.tracks[0].append(pm.MetaMessage('set_tempo', tempo=tempo, time=0))
+                #  mf.tracks[0].append(pm.MetaMessage('set_tempo', tempo=tempo, time=d))
                 
                 horns.set_note(note - 12, duration=d-beat)
                 horns.set_rest(beat)
@@ -153,8 +156,9 @@ for cycle in range(1, cycles+1):
                     horns.set_volume(level, d/24)
 
             sequence.write(f'file {( n_id + 1 ):04}.png\n')
-            #  tempo = int(pm.bpm2tempo(new_bpm))
-            seq_dur = pm.tick2second(beat, beat, tempo)
+            tempo = int(pm.bpm2tempo(new_bpm))
+            #  seq_dur = pm.tick2second(beat, beat, tempo)
+            seq_dur = tempo / 1000000
             #  seq_dur = seq_dur * 2
             sequence.write(f'duration {seq_dur}\n')
             #  breakpoint()
