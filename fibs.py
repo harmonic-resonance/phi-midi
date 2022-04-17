@@ -1,5 +1,5 @@
 
-factors = [1, 1, 2, 3, 4, 5, 6, 10, 12, 15, 30, 60, 120]
+factors = [1, 1, 2, 3, 4, 5, 6, 10, 12, 15, 30, 60, 120, 180, 240, 300]
 #  factors = factors[:-1]
 print(factors)
 
@@ -15,6 +15,6 @@ for i, f in enumerate(fibs):
         #  dur = pm.bpm2tempo(bpm) / 1_000_000
         frames.append(bpm)
 
-print(len(frames))
-print(frames)
+print('frames: ', len(frames))
+#  print(frames)
 
