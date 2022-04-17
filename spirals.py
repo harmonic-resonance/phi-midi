@@ -3,7 +3,6 @@ import math as math
 import subprocess as subprocess
 
 phi = (1 + math.sqrt(5)) / 2
-#  angle = (2 * math.pi) - ((2 * math.pi) / phi)
 angle = (2 * math.pi) - ((2 * math.pi) / phi)
 #  angle = (2 * math.pi) - ((2 * math.pi) / 144/89)
 angles = []
@@ -19,7 +18,7 @@ n = 144
 # relating to color cycles in plot
 cycles = 5
 
-bpm = 480
+bpm = 120
 tempo = int(pm.bpm2tempo(bpm))
 
 root =  pm.N.D3
@@ -121,9 +120,10 @@ for cycle in range(1, cycles+1):
             #  if i < len(offsets):
               #  offset = offsets[i] * beat
             vibes.set_note(24 + note, duration=beat)
-            if n_id % cycles == 0:
-                d = cycles * beat
-                v1.set_note(note, duration=d-beat)
+            if n_id % cycle == 0:
+                d = (cycle * beat)
+                #  v1.set_note(note, duration=d)
+                v1.set_note(note, duration=(d - beat))
                 v1.set_rest(beat)
                 v1.set_volume(20, 0)
                 for i in range(8):
@@ -138,10 +138,10 @@ for cycle in range(1, cycles+1):
                 d = n_id * beat
 
                 #  new_bpm = bpm + (4 * n_id)
-                #  new_bpm += 4 * n_id
-                #  tempo = int(pm.bpm2tempo(new_bpm))
-                #  mf.tracks[0].append(pm.MetaMessage('set_tempo', tempo=tempo, time=0))
-                #  mf.tracks[0].append(pm.MetaMessage('set_tempo', tempo=tempo, time=d))
+                new_bpm += 4 * n_id
+                tempo = int(pm.bpm2tempo(new_bpm))
+                mf.tracks[0].append(pm.MetaMessage('set_tempo', tempo=tempo, time=0))
+                mf.tracks[0].append(pm.MetaMessage('set_tempo', tempo=tempo, time=d))
                 
                 horns.set_note(note - 12, duration=d-beat)
                 horns.set_rest(beat)

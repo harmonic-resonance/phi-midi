@@ -79,4 +79,4 @@ for _ in range(4):
 
 filepath = pm.save_midi(mf, folder, filename)
 
-subprocess.run(["timidity", filepath])
+subprocess.run(["timidity", '-in', '-c', 'voices.cfg', filepath])

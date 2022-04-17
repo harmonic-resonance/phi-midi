@@ -16,9 +16,9 @@ title = f'{PROJECT} - {NAME}'
 bpm = 120
 tempo = int(pm.bpm2tempo(bpm))
 
-root = pm.N.D3
-octaves = 1
-scale_type = pm.S.dorian
+root = pm.N.C3
+octaves = 2
+scale_type = pm.S.major
 
 scale = pm.build_scale(
     root=root, 
@@ -143,5 +143,5 @@ filepath = pm.save_midi(mf, folder, filename)
 
 #  mf.print_tracks()
 
-subprocess.run(["timidity", "-c", "voices.cfg", filepath])
+subprocess.run(["timidity", '-in', "-c", "voices.cfg", filepath])
 #  subprocess.run(["timidity", filepath, "-c", "voices.cfg", '-OF'])
