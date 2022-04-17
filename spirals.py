@@ -1,6 +1,7 @@
 import phimidi as pm
 import math as math
 import subprocess as subprocess
+from fibs import *
 
 phi = (1 + math.sqrt(5)) / 2
 angle = (2 * math.pi) - ((2 * math.pi) / phi)
@@ -18,7 +19,7 @@ n = 144
 # relating to color cycles in plot
 cycles = 5
 
-bpm = 120
+bpm = 60
 tempo = int(pm.bpm2tempo(bpm))
 
 root =  pm.N.D3
@@ -45,8 +46,8 @@ for i in range(n):
     theta = angle * i
     angles.append(theta)
     
-print(angles)
-print()
+#  print(angles)
+#  print()
 
 sins = list(map(lambda a: math.sin(a), angles))
 coss = list(map(lambda a: math.cos(a), angles))
@@ -89,7 +90,6 @@ for cycle in range(1, cycles+1):
 
     filename = f'{scale_type}-{n}-{cycle:04}.mid'
 
-    new_bpm = bpm
     tempo = int(pm.bpm2tempo(bpm))
     mf = pm.new_midi(title=filename, tempo=tempo)
     beat = mf.ticks_per_beat
@@ -114,13 +114,17 @@ for cycle in range(1, cycles+1):
             bass.set_note(root - 12, duration=beat/2, velocity=60)
             bass.set_note(root - 24, duration=beat/2, velocity=20)
 
-        for n_id, note in enumerate(notes):
-            vibes.set_pan(pans[n_id], 0)
+                
+        for note_id, note in enumerate(notes):
+            tempo = int(pm.bpm2tempo(frames[note_id]))
+            mf.tracks[0].append(pm.MetaMessage('set_tempo', tempo=tempo, time=beat))
+
+            vibes.set_pan(pans[note_id], 0)
             offset = 0
             #  if i < len(offsets):
               #  offset = offsets[i] * beat
             vibes.set_note(24 + note, duration=beat)
-            if n_id % cycle == 0:
+            if note_id % cycle == 0:
                 d = (cycle * beat)
                 #  v1.set_note(note, duration=d)
                 v1.set_note(note, duration=(d - beat))
@@ -134,15 +138,9 @@ for cycle in range(1, cycles+1):
                     level = 20 + (i) * 4
                     #  level = i * 4 + 20
                     v1.set_volume(level, d/24)
-            if n_id in offsets:
-                d = n_id * beat
+            if note_id in fibs:
+                d = note_id * beat
 
-                #  new_bpm = bpm + (4 * n_id)
-                new_bpm += 4 * n_id
-                tempo = int(pm.bpm2tempo(new_bpm))
-                mf.tracks[0].append(pm.MetaMessage('set_tempo', tempo=tempo, time=0))
-                mf.tracks[0].append(pm.MetaMessage('set_tempo', tempo=tempo, time=d))
-                
                 horns.set_note(note - 12, duration=d-beat)
                 horns.set_rest(beat)
                 horns.set_volume(10, 0)
@@ -155,8 +153,8 @@ for cycle in range(1, cycles+1):
                     #  level = i * 4 + 20
                     horns.set_volume(level, d/24)
 
-            sequence.write(f'file {( n_id + 1 ):04}.png\n')
-            tempo = int(pm.bpm2tempo(new_bpm))
+            sequence.write(f'file {( note_id + 1 ):04}.png\n')
+            #  tempo = int(pm.bpm2tempo(new_bpm))
             #  seq_dur = pm.tick2second(beat, beat, tempo)
             seq_dur = tempo / 1000000
             #  seq_dur = seq_dur * 2
