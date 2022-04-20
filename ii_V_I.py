@@ -120,4 +120,4 @@ for cycle in range(4):
 filepath = pm.save_midi(mf, folder, filename)
 
 #  subprocess.run(["timidity", filepath, "-c", "voices.cfg", '-OF'])
-subprocess.run(["timidity", '-in', "-c", "voices.cfg", filepath])
+subprocess.run(["timidity", '-in', "-c", "~/.photon/timidity.cfg", filepath])

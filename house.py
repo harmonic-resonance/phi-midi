@@ -53,8 +53,11 @@ chords = pm.progressions.i_vi_ii_V(root)
 
 for cycle in range(4):
     for chord in chords:
+        # bass, horn, drum loops
+        # bass, drums fill on 4
         for m in range(4):
             if m == 3:
+                # fill
                 bass.set_note(chord[0] - 24, M/8, velocity=90)
                 bass.set_note(chord[3] - 24, M/8, velocity=50)
                 bass.set_note(chord[2] - 24, M/8, velocity=80)
@@ -63,6 +66,7 @@ for cycle in range(4):
                 bass.set_note(chord[3] - 24, M/8, velocity=50)
                 bass.set_note(chord[2] - 24, M/8, velocity=80)
                 bass.set_note(chord[1] - 24, M/8, velocity=50)
+                # swap ride and snare
                 pm.funky_drummer(M, kick, ride, hihat_closed, snare )
             else:
                 bass.set_note(chord[0] - 12, M/2, velocity=80)
@@ -80,15 +84,6 @@ for cycle in range(4):
         for val in reversed(steps):
             horns.set_volume(val, 3 * M/len(steps))
 
-        #choir
-        #  choir.set_volume(steps[0], 0)
-        #  choir.set_notes(chord, 15 * M/4)
-        #  choir.set_rest(M/4)
-        #  for val in steps:
-            #  choir.set_volume(val, 2 * M/len(steps))
-        #  for val in reversed(steps):
-            #  choir.set_volume(val, 2 * M/len(steps))
-
         #vibes
         vibes.set_volume(steps[0], 0)
         chord = [note + 12 for note in chord]
@@ -99,8 +94,6 @@ for cycle in range(4):
         pm.add_arp_down(vibes, chord, M)
         for val in steps:
             vibes.set_volume(val, 4 * M/len(steps))
-
-        #  for val in reversed(steps): #  vibes.set_volume(val, 2 * M/len(steps))
 
         # strings
         if cycle > 1:
@@ -113,6 +106,7 @@ for cycle in range(4):
         for val in reversed(steps):
             strings.set_volume(val, 3 * M/len(steps))
 
+        # solo
         if cycle > 2:
             solo.set_rest(M/4)
             solo.set_note(chord[0], 3 * M/4)
@@ -131,4 +125,4 @@ for cycle in range(4):
 filepath = pm.save_midi(mf, folder, filename)
 
 #  subprocess.run(["timidity", filepath, "-c", "voices.cfg", '-OF'])
-subprocess.run(["timidity", '-in', "-c", "voices.cfg", filepath])
+subprocess.run(["timidity", '-in', "-c", "~/.photon/timidity.cfg", filepath])
