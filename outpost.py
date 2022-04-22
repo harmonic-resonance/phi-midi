@@ -15,11 +15,11 @@ title = f'{PROJECT} - {NAME}'
 bpm = 120
 tempo = int(pm.bpm2tempo(bpm))
 
-root = pm.N.A2
+root = pm.N.D3
 octaves = 2
 scale_type = pm.S.dorian
-scale_type = pm.S.major
-#  scale_type = pm.S.pentatonic_major
+#  scale_type = pm.S.major
+scale_type = pm.S.pentatonic_major
 
 scale = pm.build_scale(
     root=root, 
@@ -75,4 +75,4 @@ for chord in perms:
 filepath = pm.save_midi(mf, folder, filename)
 
 #  subprocess.run(["timidity", filepath, "-c", "voices.cfg", '-OF'])
-subprocess.run(["timidity", '-in', "-c", "voices.cfg", filepath])
+subprocess.run(["timidity", '-in', "-c", "~/.photon/timidity.cfg", filepath])

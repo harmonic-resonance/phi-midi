@@ -14,10 +14,10 @@ print('degrees:', math.degrees(angle))
 print()
 
 # number of nodes
-n = 144
+n = 986
 
 # relating to color cycles in plot
-cycles = 5
+cycles = 13
 
 bpm = 60
 tempo = int(pm.bpm2tempo(bpm))
@@ -63,7 +63,7 @@ def get_note_circle(angle):
     angle = angle % (2 * math.pi)
     i = int(angle / divs)
     note = scale[i]
-    print(angle, i, note)
+    #  print(angle, i, note)
     return note
 
 def get_pan(x):
@@ -98,7 +98,7 @@ for cycle in range(1, cycles+1):
     vibes = pm.make_vibes(mf, 1)
     bass = pm.make_bass(mf, 2)
     horns = pm.make_horns(mf, 3)
-    v1 = pm.make_choir_swell(mf)
+    v1 = pm.make_choir_mixed(mf)
 
     out = f'{sessions}/{folder}/'
     os.makedirs(out, exist_ok=True)
@@ -106,9 +106,11 @@ for cycle in range(1, cycles+1):
     with open(f'{out}/sequence.txt', 'w') as sequence:
         vibes.set_volume(60, 0)
         v1.set_volume(90, 0)
-        horns.set_volume(40, 0)
+        horns.set_volume(10, 0)
         for i in range(n):
             #  level = int(30 + ((i/n) * 60)) 
+            level = int(10 + ((i/n) * 60)) 
+            horns.set_volume(level, beat)
             level = int(70 - ((i/n) * 60)) 
             bass.set_volume(level, beat)
             bass.set_note(root - 12, duration=beat/2, velocity=60)
@@ -143,15 +145,15 @@ for cycle in range(1, cycles+1):
 
                 horns.set_note(note - 12, duration=d-beat)
                 horns.set_rest(beat)
-                horns.set_volume(10, 0)
-                for i in range(8):
-                    level = (i) * 8 + 10
-                    #  level = i * 4 + 20
-                    horns.set_volume(level, d/24)
-                for i in reversed(range(16)):
-                    level = (i) * 4 + 10
-                    #  level = i * 4 + 20
-                    horns.set_volume(level, d/24)
+                #  horns.set_volume(10, 0)
+                #  for i in range(8):
+                    #  level = (i) * 8 + 10
+                    #  #  level = i * 4 + 20
+                    #  horns.set_volume(level, d/24)
+                #  for i in reversed(range(16)):
+                    #  level = (i) * 4 + 10
+                    #  #  level = i * 4 + 20
+                    #  horns.set_volume(level, d/24)
 
             sequence.write(f'file {( note_id + 1 ):04}.png\n')
             #  tempo = int(pm.bpm2tempo(new_bpm))
@@ -161,7 +163,7 @@ for cycle in range(1, cycles+1):
             sequence.write(f'duration {seq_dur}\n')
             #  breakpoint()
         
-        filepath = pm.save_midi(mf, folder, filename)
+        filepath = pm.save_midi(mf, folder, 'sequence.mid')
         #  subprocess.run(["timidity", filepath, "-c", "voices.cfg", '-Ov'])
 
     #  mf.print_tracks()
