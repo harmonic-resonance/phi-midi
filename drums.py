@@ -51,17 +51,17 @@ tick.set_hits(M, 4, velocity=40)
 mf.tracks[0].append(pm.MetaMessage('marker', text='billie jean', time=M))
 ride.set_rest(2 * M)
 for _ in range(2):
-    pm.billie_jean(M, kick, snare, hihat_closed)
+    pm.patterns.funky.billie_jean(M, kick, snare, hihat_closed)
 
 mf.tracks[0].append(pm.MetaMessage('marker', text='swing', time=2 * M))
 snare.set_rest(2 * M)
 hihat_closed.set_rest(2 * M)
 for _ in range(4):
-    pm.swing(M, kick, ride)
+    pm.patterns.swing.swing(M, kick, ride)
 
 mf.tracks[0].append(pm.MetaMessage('marker', text='funky drummer', time=2 * M))
 for _ in range(2):
-    pm.funky_drummer(2 * M, kick, snare, hihat_closed, ride)
+    pm.patterns.funky.funky_drummer(2 * M, kick, snare, hihat_closed, ride)
 
 mf.tracks[0].append(pm.MetaMessage('marker', text='deep_house', time=4 * M))
 for _ in range(2):
@@ -71,7 +71,7 @@ for _ in range(2):
 
 mf.tracks[0].append(pm.MetaMessage('marker', text='jungle', time=8 * M))
 for _ in range(2):
-    pm.jungle(2 * M, kick, snare, hihat_closed, ride)
+    pm.patterns.funky.jungle(2 * M, kick, snare, hihat_closed, ride)
 
 mf.tracks[0].append(pm.MetaMessage('marker', text='drum_bass', time=4 * M))
 for _ in range(4):
@@ -79,4 +79,4 @@ for _ in range(4):
 
 filepath = pm.save_midi(mf, folder, filename)
 
-subprocess.run(["timidity", '-in', '-c', 'voices.cfg', filepath])
+subprocess.run(["timidity", '-in', '-c', '~/.photon/timidity.cfg', filepath])

@@ -1,5 +1,6 @@
-import phimidi.chords.chord_types as C
-import phimidi.chords.progressions as progressions
+#  import phimidi.chords.chord_types as C
+from . import chord_types as C
+from . import progressions
 
 def get_chord_notes(root, chord_type):
     notes = []

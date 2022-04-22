@@ -4,7 +4,8 @@ includes patterns from:
 https://www.learnjazzstandards.com/blog/learning-jazz/jazz-theory/3-important-jazz-chord-progressions-need-master/
 '''
 import phimidi as pm
-import phimidi.chords.chord_types as C
+#  import phimidi.chords.chord_types as C
+from . import chord_types as C
 
 EBCsA = [
         (pm.N.E4, 4, C.major),
