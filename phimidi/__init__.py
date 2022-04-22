@@ -1,12 +1,13 @@
 #  from mido import *
 from mido import MidiFile, Message, MetaMessage, bpm2tempo, second2tick, tick2second
-import phimidi.notes as N
-from phimidi.scales import *
-from phimidi.chords import *
-from phimidi.instruments import *
-from phimidi.voices import *
-from phimidi.percussions import *
-from phimidi.arps import *
+#  import .notes as N
+from . import notes as N
+from .scales import *
+from .chords import *
+from .instruments import *
+from .voices import *
+from .percussions import *
+from .arps import *
 
 
 def new_midi(title='', tempo=500000):

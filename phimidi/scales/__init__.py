@@ -1,5 +1,5 @@
 '''utils for building scales'''
-import phimidi.scales.scale_types as S
+from . import scale_types as S
 
 def build_scale(root=48, scale_type=S.major, octaves=3):
     notes = [root]

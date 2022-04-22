@@ -51,11 +51,10 @@ print(steps)
 chords = pm.progressions.ii_V_I(root)
 #  chords = pm.progressions.i_vi_ii_V(root)
 
-
 for cycle in range(4):
     for chord in chords:
         for _ in range(4):
-            pm.swing(M, kick, ride)
+            pm.patterns.swing.swing(M, kick, ride)
             bass.set_note(chord[0] - 12, M/2, velocity=80)
             bass.set_note(chord[2] - 24, M/2, velocity=50)
             if cycle > 0:
@@ -115,9 +114,6 @@ for cycle in range(4):
         else:
             solo.set_rest(4 * M)
 
-
-
 filepath = pm.save_midi(mf, folder, filename)
 
-#  subprocess.run(["timidity", filepath, "-c", "voices.cfg", '-OF'])
 subprocess.run(["timidity", '-in', "-c", "~/.photon/timidity.cfg", filepath])

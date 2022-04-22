@@ -1,5 +1,6 @@
 import phimidi as pm
-from phimidi.instruments import Instrument
+from . import voice_types as V
+from ..instruments import Instrument
 
 class Voice(Instrument):
 
@@ -7,8 +8,7 @@ class Voice(Instrument):
 
     def __init__(self, mf, voice_name):
         """TODO: to be defined. """
-        #  inst_id = pm.INSTRUMENTS.index(name)
-        voice_dict = pm.V.VOICES[voice_name]
+        voice_dict = V.VOICES[voice_name]
         self.name = voice_name
         self.instrument = voice_dict['program']
         self.channel = voice_dict['channel']
@@ -37,7 +37,5 @@ class Voice(Instrument):
 
         self.track_volume = pm.set_new_track(mf, name=f'{self.name}-volume')
         self.track_pan = pm.set_new_track(mf, name=f'{self.name}-pan')
-        #  self.track_reverb = pm.set_new_track(mf, name=f'{self.name}-reverb')
-        #  self.track_chorus = pm.set_new_track(mf, name=f'{self.name}-chorus')
 
 
