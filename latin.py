@@ -2,6 +2,14 @@ import phimidi as pm
 import math as math
 import subprocess as subprocess
 
+def hold_4(dur,  kick, tick, ride):
+    tick.set_hits(dur, 4, velocity=40)
+    kick.set_hits(dur, 2, velocity=60)
+    ride.set_hits(dur, 8, velocity=40)
+
+def set_marker(mf, text, dur):
+    mf.tracks[0].append(pm.MetaMessage('marker', text=text, time=dur))
+
 
 PROJECT = 'phi-midi'
 NAME = 'latin'
@@ -22,24 +30,36 @@ hihat_closed = pm.Percussion(mf, pm.P.closed_hi_hat)
 ride = pm.Percussion(mf, pm.P.ride_cymbal_1)
 
 # count
+#  mf.tracks[0].append(pm.MetaMessage('marker', text='count', time=0))
+set_marker(mf, 'count', 0)
 kick.set_rest(M)
 #  snare.set_rest(M)
 #  hihat_closed.set_rest(M)
 ride.set_rest(M)
-mf.tracks[0].append(pm.MetaMessage('marker', text='count', time=0))
 tick.set_hits(M, 4, velocity=40)
 
-mf.tracks[0].append(pm.MetaMessage('marker', text='son_clave', time=M))
-for _ in range(4):
-    pm.patterns.latin.son_clave(M, kick, tick, ride)
+measures = 4
 
-mf.tracks[0].append(pm.MetaMessage('marker', text='bossa nova', time=M))
-for _ in range(4):
-    pm.patterns.latin.bossa_nova(M, kick, tick, ride)
+set_marker(mf, 'son_clave', M)
+for i in range(measures):
+    if i < 3:
+        pm.patterns.latin.son_clave(M, kick, tick, ride)
+    else:
+        pm.patterns.latin.son_clave(M, tick, kick, ride)
+hold_4(M, kick, tick, ride)
 
-mf.tracks[0].append(pm.MetaMessage('marker', text='rhumba', time=M))
-for _ in range(4):
+set_marker(mf, 'bossa_nova', measures * M)
+for i in range(measures):
+    if i < 3:
+        pm.patterns.latin.bossa_nova(M, kick, tick, ride)
+    else:
+        pm.patterns.latin.bossa_nova(M, tick, kick, ride)
+hold_4(M, kick, tick, ride)
+
+set_marker(mf, 'rhumba', measures * M)
+for i in range(measures):
     pm.patterns.latin.rhumba(M, kick, tick, ride)
+hold_4(M, kick, tick, ride)
 
 filepath = pm.save_midi(mf, folder, filename)
 

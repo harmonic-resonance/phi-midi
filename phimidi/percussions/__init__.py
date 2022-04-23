@@ -11,6 +11,12 @@ def make_tick(mf):
 def make_kick(mf):
     return Percussion(mf, P.acoustic_bass_drum)
 
+def make_low_tom(mf):
+    return Percussion(mf, P.low_tom)
+
+def make_high_tom(mf):
+    return Percussion(mf, P.high_tom)
+
 def make_snare(mf):
     return Percussion(mf, P.acoustic_snare)
 

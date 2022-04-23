@@ -7,12 +7,6 @@ import phimidi as pm
 #  import phimidi.chords.chord_types as C
 from . import chord_types as C
 
-EBCsA = [
-        (pm.N.E4, 4, C.major),
-        (pm.N.B3, 4, C.major),
-        (pm.N.Cs4, 4,C.minor),
-        (pm.N.A3, 4, C.major),
-        ]
 EAGsABE = [
         (pm.N.E4, 2, C.major),
         (pm.N.A4, 2, C.major),
@@ -32,12 +26,19 @@ p5 = [
         ]
 
 
-def ii_V_I(root):
-    ii = pm.get_chord_notes(2 + root, C.minor_7)
+EBCsA = [
+        (pm.N.E4, 4, C.major),
+        (pm.N.B3, 4, C.major),
+        (pm.N.Cs4, 4, C.minor),
+        (pm.N.A3, 4, C.major),
+        ]
+def I_V_vis_IV(root):
+    I = pm.get_chord_notes(0 + root, C.major)
     V = pm.get_chord_notes(7 + root, C.dominant_7)
-    I = pm.get_chord_notes(0 + root, C.major_7)
+    vis = pm.get_chord_notes(10 + root, C.minor)
+    IV = pm.get_chord_notes(5 + root, C.dominant_7)
 
-    return [ii, V, I]
+    return [I, V, vis, IV]
 
 def ii_V_i(root):
     ii = pm.get_chord_notes(2 + root, C.minor_7)
