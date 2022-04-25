@@ -17,7 +17,6 @@
    
   <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
   
-  
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head><body>
@@ -26,61 +25,35 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          
-
           <div class="body" role="main">
             
   <h1>Source code for phimidi.voices</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">phimidi</span> <span class="k">as</span> <span class="nn">pm</span>
+<span></span><span class="kn">from</span> <span class="nn">.voice</span> <span class="kn">import</span> <span class="n">Voice</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">voice_types</span> <span class="k">as</span> <span class="n">V</span>
 
-<span class="n">VOICES</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;Solo Ooh&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;bank&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;subbank&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;channel&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;program&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
-    <span class="s1">&#39;Solo Aah&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;bank&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;subbank&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;channel&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;program&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
-    <span class="s1">&#39;Mixed Choir&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;bank&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;subbank&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;channel&#39;</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span> <span class="s1">&#39;program&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
-    <span class="s1">&#39;Little Swell Choir&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;bank&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;subbank&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;channel&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span> <span class="s1">&#39;program&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span>
-    <span class="s1">&#39;Swell Choir&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;bank&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;subbank&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;channel&#39;</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span> <span class="s1">&#39;program&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">},</span>
-    <span class="s1">&#39;Choir Ooh&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;bank&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;subbank&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;channel&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="s1">&#39;program&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">},</span>
-    <span class="s1">&#39;Choir Aah&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;bank&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;subbank&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;channel&#39;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="s1">&#39;program&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">},</span>
-<span class="p">}</span>
+<div class="viewcode-block" id="make_solo_ooh"><a class="viewcode-back" href="../../phimidi.html#phimidi.voices.make_solo_ooh">[docs]</a><span class="k">def</span> <span class="nf">make_solo_ooh</span><span class="p">(</span><span class="n">mf</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">Voice</span><span class="p">(</span><span class="n">mf</span><span class="p">,</span> <span class="n">voice_name</span><span class="o">=</span><span class="n">V</span><span class="o">.</span><span class="n">solo_ooh</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="add_voice_track"><a class="viewcode-back" href="../../phimidi.html#phimidi.voices.add_voice_track">[docs]</a><span class="k">def</span> <span class="nf">add_voice_track</span><span class="p">(</span><span class="n">mf</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Mixed Choir&#39;</span><span class="p">):</span>
-    <span class="n">track</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">set_new_track</span><span class="p">(</span><span class="n">mf</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
-    <span class="n">v</span> <span class="o">=</span> <span class="n">VOICES</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
-    
-    <span class="n">track</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pm</span><span class="o">.</span><span class="n">Message</span><span class="p">(</span>
-        <span class="s1">&#39;control_change&#39;</span><span class="p">,</span> 
-        <span class="n">control</span> <span class="o">=</span>  <span class="mi">0</span><span class="p">,</span> 
-        <span class="n">value</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="s1">&#39;bank&#39;</span><span class="p">],</span> 
-        <span class="n">channel</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="s1">&#39;channel&#39;</span><span class="p">],</span> 
-        <span class="n">time</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="p">))</span>
-    <span class="n">track</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pm</span><span class="o">.</span><span class="n">Message</span><span class="p">(</span>
-        <span class="s1">&#39;control_change&#39;</span><span class="p">,</span> 
-        <span class="n">control</span> <span class="o">=</span> <span class="mi">32</span><span class="p">,</span> 
-        <span class="n">value</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="s1">&#39;subbank&#39;</span><span class="p">],</span> 
-        <span class="n">channel</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="s1">&#39;channel&#39;</span><span class="p">],</span> 
-        <span class="n">time</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="p">))</span>
-    <span class="n">track</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pm</span><span class="o">.</span><span class="n">Message</span><span class="p">(</span>
-        <span class="s1">&#39;program_change&#39;</span><span class="p">,</span> 
-        <span class="n">program</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="s1">&#39;program&#39;</span><span class="p">],</span>
-        <span class="n">channel</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="s1">&#39;channel&#39;</span><span class="p">],</span> 
-        <span class="n">time</span> <span class="o">=</span> <span class="mi">1</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">track</span></div>
+<div class="viewcode-block" id="make_solo_aah"><a class="viewcode-back" href="../../phimidi.html#phimidi.voices.make_solo_aah">[docs]</a><span class="k">def</span> <span class="nf">make_solo_aah</span><span class="p">(</span><span class="n">mf</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">Voice</span><span class="p">(</span><span class="n">mf</span><span class="p">,</span> <span class="n">voice_name</span><span class="o">=</span><span class="n">V</span><span class="o">.</span><span class="n">solo_aah</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="add_voice_note"><a class="viewcode-back" href="../../phimidi.html#phimidi.voices.add_voice_note">[docs]</a><span class="k">def</span> <span class="nf">add_voice_note</span><span class="p">(</span><span class="n">track</span><span class="p">,</span> <span class="n">note</span><span class="p">,</span> <span class="n">velocity</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mi">1920</span><span class="p">):</span>
-    <span class="n">v</span> <span class="o">=</span> <span class="n">VOICES</span><span class="p">[</span><span class="n">track</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
-    <span class="n">pm</span><span class="o">.</span><span class="n">set_note</span><span class="p">(</span><span class="n">track</span><span class="p">,</span> <span class="n">note</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="n">v</span><span class="p">[</span><span class="s1">&#39;channel&#39;</span><span class="p">],</span> <span class="n">velocity</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">duration</span><span class="p">)</span></div>
+<div class="viewcode-block" id="make_choir_aah"><a class="viewcode-back" href="../../phimidi.html#phimidi.voices.make_choir_aah">[docs]</a><span class="k">def</span> <span class="nf">make_choir_aah</span><span class="p">(</span><span class="n">mf</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">Voice</span><span class="p">(</span><span class="n">mf</span><span class="p">,</span> <span class="n">voice_name</span><span class="o">=</span><span class="n">V</span><span class="o">.</span><span class="n">choir_aah</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="add_voice_chord"><a class="viewcode-back" href="../../phimidi.html#phimidi.voices.add_voice_chord">[docs]</a><span class="k">def</span> <span class="nf">add_voice_chord</span><span class="p">(</span><span class="n">track</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">chord</span><span class="o">=</span><span class="s1">&#39;Major&#39;</span><span class="p">,</span> <span class="n">velocity</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mi">1920</span><span class="p">):</span>
-    <span class="n">v</span> <span class="o">=</span> <span class="n">VOICES</span><span class="p">[</span><span class="n">track</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
-    <span class="c1"># pm.set_note(track, note, channel=v[&#39;channel&#39;], duration=1920*2)</span>
-    <span class="n">pm</span><span class="o">.</span><span class="n">set_chord</span><span class="p">(</span><span class="n">track</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">,</span> <span class="n">chord</span><span class="o">=</span><span class="n">chord</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="n">v</span><span class="p">[</span><span class="s1">&#39;channel&#39;</span><span class="p">],</span> <span class="n">velocity</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">duration</span><span class="p">)</span></div>
- 
+<div class="viewcode-block" id="make_choir_ooh"><a class="viewcode-back" href="../../phimidi.html#phimidi.voices.make_choir_ooh">[docs]</a><span class="k">def</span> <span class="nf">make_choir_ooh</span><span class="p">(</span><span class="n">mf</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">Voice</span><span class="p">(</span><span class="n">mf</span><span class="p">,</span> <span class="n">voice_name</span><span class="o">=</span><span class="n">V</span><span class="o">.</span><span class="n">choir_ooh</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="make_choir_mixed"><a class="viewcode-back" href="../../phimidi.html#phimidi.voices.make_choir_mixed">[docs]</a><span class="k">def</span> <span class="nf">make_choir_mixed</span><span class="p">(</span><span class="n">mf</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">Voice</span><span class="p">(</span><span class="n">mf</span><span class="p">,</span> <span class="n">voice_name</span><span class="o">=</span><span class="n">V</span><span class="o">.</span><span class="n">choir_mixed</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="make_choir_swell"><a class="viewcode-back" href="../../phimidi.html#phimidi.voices.make_choir_swell">[docs]</a><span class="k">def</span> <span class="nf">make_choir_swell</span><span class="p">(</span><span class="n">mf</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">Voice</span><span class="p">(</span><span class="n">mf</span><span class="p">,</span> <span class="n">voice_name</span><span class="o">=</span><span class="n">V</span><span class="o">.</span><span class="n">choir_swell</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="make_choir_little_swell"><a class="viewcode-back" href="../../phimidi.html#phimidi.voices.make_choir_little_swell">[docs]</a><span class="k">def</span> <span class="nf">make_choir_little_swell</span><span class="p">(</span><span class="n">mf</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">Voice</span><span class="p">(</span><span class="n">mf</span><span class="p">,</span> <span class="n">voice_name</span><span class="o">=</span><span class="n">V</span><span class="o">.</span><span class="n">choir_little_swell</span><span class="p">)</span></div>
 </pre></div>
 
           </div>
-          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -135,14 +108,6 @@
     </div>
 </div>
 <script>$('#searchbox').show(0);</script>
-
-
-
-
-
-
-
-
         </div>
       </div>
       <div class="clearer"></div>
@@ -152,7 +117,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
       
     </div>
 
