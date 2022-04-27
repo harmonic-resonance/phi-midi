@@ -1,0 +1,19 @@
+Metadata-Version: 2.1
+Name: phimidi
+Version: 0.0.2
+Summary: sequence and render midi compositions
+Home-page: https://phiarchitect.github.io/phi-midi
+Author: phi ARCHITECT
+Author-email: phi@phiarchitect.com
+License: UNKNOWN
+Project-URL: Code, https://github.com/phiarchitect/phi-midi
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+
+# phi-midi
+
+
