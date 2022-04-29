@@ -55,6 +55,7 @@ class Instrument():
 
     def set_volume(self, level, duration):
         duration = int(duration)
+        self.track_volume.append(pm.Message('control_change', channel=self.channel, control=7, value=level, time=0))
         self.track_volume.append(pm.Message('control_change', channel=self.channel, control=7, value=level, time=duration))
 
     def set_pan(self, level, duration):
