@@ -65,8 +65,8 @@ for _ in range(2):
 
 mf.tracks[0].append(pm.MetaMessage('marker', text='deep_house', time=4 * M))
 for _ in range(2):
-    pm.deep_house(2 * M, kick, snare, hihat_closed, ride)
-    pm.deep_house(2 * M, ride, kick, snare, hihat_closed)
+    pm.patterns.techno.deep_house(2 * M, kick, snare, hihat_closed, ride)
+    pm.patterns.techno.deep_house(2 * M, ride, kick, snare, hihat_closed)
 
 
 mf.tracks[0].append(pm.MetaMessage('marker', text='jungle', time=8 * M))
@@ -75,7 +75,7 @@ for _ in range(2):
 
 mf.tracks[0].append(pm.MetaMessage('marker', text='drum_bass', time=4 * M))
 for _ in range(4):
-    pm.drum_bass(2 * M, kick, snare, hihat_closed, ride)
+    pm.patterns.techno.drum_bass(2 * M, kick, snare, hihat_closed, ride)
 
 filepath = pm.save_midi(mf, folder, filename)
 

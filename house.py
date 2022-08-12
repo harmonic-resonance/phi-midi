@@ -67,11 +67,11 @@ for cycle in range(4):
                 bass.set_note(chord[2] - 24, M/8, velocity=80)
                 bass.set_note(chord[1] - 24, M/8, velocity=50)
                 # swap ride and snare
-                pm.funky_drummer(M, kick, ride, hihat_closed, snare )
+                pm.patterns.funky.funky_drummer(M, kick, ride, hihat_closed, snare )
             else:
                 bass.set_note(chord[0] - 12, M/2, velocity=80)
                 bass.set_note(chord[2] - 24, M/2, velocity=50)
-                pm.funky_drummer(M, kick, snare, hihat_closed, ride)
+                pm.patterns.funky.funky_drummer(M, kick, snare, hihat_closed, ride)
             if cycle > 0:
                 #  horns.set_rest(M/4)
                 horns.set_note(chord[1], M/4)

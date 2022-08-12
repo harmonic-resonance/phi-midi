@@ -41,7 +41,7 @@ strings = pm.make_strings(mf, 4)
 #  tick = pm.make_tick(mf)
 
 choir = pm.make_choir_swell(mf)
-choir = strings
+#  choir = strings
 
 steps = np.arange(32, 96, 4)
 print(f'steps: {len(steps)}')
