@@ -20,13 +20,17 @@ class Instrument():
 
 
     def set_rest(self, duration):
+        '''appends  a `note_off` message for the `duration` to the Instrument track
+        '''
         duration = int(duration)
         self.track.append(pm.Message('note_off', note=0, channel=self.channel, velocity=127, time=duration))
+
 
     def set_note(self, note, duration, velocity=64):
         duration = int(duration)
         self.track.append(pm.Message('note_on', note=note, channel=self.channel, velocity=velocity, time=0))
         self.track.append(pm.Message('note_off', note=note, channel=self.channel, velocity=127, time=duration))
+
 
     def set_notes(self, notes, duration, offset=0, velocity=64):
         duration = int(duration)
@@ -53,10 +57,12 @@ class Instrument():
                 #  time = 0
             #  self.track.append(pm.Message('note_off', note=root+offset, channel=self.channel, velocity=127, time=time))
 
+
     def set_volume(self, level, duration):
         duration = int(duration)
         self.track_volume.append(pm.Message('control_change', channel=self.channel, control=7, value=level, time=0))
         self.track_volume.append(pm.Message('control_change', channel=self.channel, control=7, value=level, time=duration))
+
 
     def set_pan(self, level, duration):
         duration = int(duration)
