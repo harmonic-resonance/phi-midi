@@ -9,7 +9,7 @@ class Instrument():
         self.name = pm.I.INSTRUMENTS[inst_id]
         self.instrument = inst_id
         self.channel = channel
-        
+
         self.track = pm.set_new_track(mf, name=self.name)
         self.track.append(pm.Message('program_change', channel=channel, program=inst_id, time=0))
 
@@ -43,7 +43,7 @@ class Instrument():
                 time = 0
             self.track.append(pm.Message('note_off', note=note, channel=self.channel, velocity=127, time=time))
 
-    
+
     def set_chord(self, root, duration, chord_type=pm.C.major, velocity=64):
         duration = int(duration)
         notes = pm.get_chord_notes(root, chord_type)
@@ -77,7 +77,7 @@ class Instrument():
     #  def set_reverb(self, level, duration):
         #  duration = int(duration)
         #  self.track_reverb.append(pm.Message('control_change', channel=self.channel, control=91, value=level, time=duration))
-        
+
     #  def set_chorus(self, level, duration):
         #  duration = int(duration)
         #  self.track_chorus.append(pm.Message('control_change', channel=self.channel, control=93, value=level, time=duration))
