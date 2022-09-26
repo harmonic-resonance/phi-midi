@@ -12,7 +12,6 @@ folder = f'{PROJECT}/{NAME}'
 filename = f'{NAME}.mid'
 title = f'{PROJECT} - {NAME}'
 
-
 bpm = 90  # beats per minute
 tempo = int(pm.bpm2tempo(bpm))
 
@@ -44,6 +43,7 @@ strings = pm.make_strings(mf, 4)
 kick = pm.make_kick(mf)
 snare = pm.make_snare(mf)
 ride = pm.make_ride(mf)
+tick = pm.make_tick(mf)
 hihat_closed = pm.make_hihat_closed(mf)
 
 choir = pm.make_choir_swell(mf)
@@ -56,11 +56,12 @@ steps = np.arange(32, 96, 4)
 print(f'steps: {len(steps)}')
 print(steps)
 
-chords = pm.progressions.I_V_vis_IV(root)
+#  chords = pm.progressions.i_vi_ii_V(root)
+chords = pm.progressions.p5(root)
 
-for verse in range(4):
+for verse in range(2):
     # each cord is held for 4 measures
-    for chord in chords:
+    for chord_num, chord in enumerate(chords):
         # bass, horn, drum loops
         # bass, drums fill on 4
         for m in range(4):
@@ -70,49 +71,53 @@ for verse in range(4):
 
                 # swap ride and snare
                 #  pm.patterns.techno.drum_bass(M, kick, ride, hihat_closed, snare )
-                pm.patterns.swing.swing(M, ride, kick)
+                #  pm.patterns.latin.rhumba(M, ride, tick, kick)
             else:
-                bass.set_note(root, M, velocity=90)
+                bass.set_note(root - 12, M, velocity=90)
 
                 #  pm.patterns.techno.drum_bass(M, kick, snare, hihat_closed, ride)
-                pm.patterns.swing.swing(M, kick, ride)
+                #  pm.patterns.latin.rhumba(M, kick, tick, ride)
 
-        choir.set_notes(chord, 4 * M)
+        choir.set_rest(M)
+        choir.set_notes(chord, 3 * M)
         for val in steps:
-            choir.set_volume(val, 1 * M/len(steps))
+            choir.set_volume(val, 2 * M/len(steps))
 
         for val in reversed(steps):
-            choir.set_volume(val, 3 * M/len(steps))
+            choir.set_volume(val, 2 * M/len(steps))
 
         #vibes
         #  vibes.set_volume(steps[0], 0)
         chord2 = [note + 12 for note in chord]
         chord3 = [note + 12 for note in chord2]
+        chord4 = [note + 12 for note in chord3]
 
-        vibes.set_rest(M)
-        for _ in range(2):
-            vibes.set_notes(chord2, M/4, velocity=70)
-            vibes.set_notes(chord3, M/4, velocity=80)
-            vibes.set_notes(chord, M/4, velocity=70)
-            vibes.set_notes(chord2, M/4, velocity=80)
-            #  pm.add_arp_up(vibes, chord, M)
-            #  pm.add_arp_down(vibes, chord, M)
-        vibes.set_rest(M)
+        offset = M/32
+        vibes.set_rest(2 * M)
+        vibes.set_notes(chord3, M/2, offset=offset, velocity=65)
+        vibes.set_notes(chord4, M + M/2, offset=offset, velocity=85)
+        #  vibes.set_notes(chord, M/4, velocity=70)
+        #  vibes.set_notes(chord2, M/4, velocity=80)
+        #  #  pm.add_arp_up(vibes, chord, M)
+        #  #  pm.add_arp_down(vibes, chord, M)
+        #  vibes.set_rest(M)
 
-        for val in steps:
-            vibes.set_volume(val, 4 * M/len(steps))
+        #  for val in steps:
+            #  vibes.set_volume(val, 4 * M/len(steps))
 
         # strings
-        if verse > 1:
-            for m in range(4):
-                strings.set_notes(chord[0:m+1], M)
+        if verse > 0:
+            strings.set_rest(2 * M)
+            strings.set_notes(chord, 2 * M, M / 8)
+            #  strings.set_notes(chord, 2 * M, M / 2)
         else:
             strings.set_rest(4 * M)
 
+        strings.set_volume(steps[0], 2 * M)
         for val in steps:
-            strings.set_volume(val, 1 * M/len(steps))
+            strings.set_volume(val, M/len(steps))
         for val in reversed(steps):
-            strings.set_volume(val, 3 * M/len(steps))
+            strings.set_volume(val, M/len(steps))
 
         # solo
         if verse > 2:

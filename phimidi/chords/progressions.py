@@ -67,3 +67,27 @@ def i_vi_ii_V(root):
     V = pm.get_chord_notes(7 + root, C.dominant_7)
 
     return [i, vi, ii, V]
+
+#  p5 = [
+        #  (pm.N.C3, 4, C.major),
+        #  (pm.N.F3, 4, C.dominant_9),
+        #  (pm.N.A3, 4, C.minor_7),
+        #  (pm.N.G3, 4, C.dominant_11),
+        #  (pm.N.A3, 4, C.minor_11),
+        #  (pm.N.F3, 4, C.dominant_9),
+        #  (pm.N.C3, 8, C.dominant_13),
+        #  ]
+
+def p5(root):
+    chords = [
+            pm.get_chord_notes(0 + root, C.major_7),
+            pm.get_chord_notes(5 + root, C.dominant_9),
+            pm.get_chord_notes(9 + root, C.minor_7),
+            pm.get_chord_notes(7 + root, C.dominant_11),
+            pm.get_chord_notes(9 + root, C.minor_11),
+            pm.get_chord_notes(5 + root, C.dominant_9),
+            pm.get_chord_notes(0 + root + 12, C.major_7),
+            ]
+
+    return chords
+

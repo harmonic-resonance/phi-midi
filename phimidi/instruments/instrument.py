@@ -34,11 +34,19 @@ class Instrument():
 
     def set_notes(self, notes, duration, offset=0, velocity=64):
         duration = int(duration)
-        for note in notes:
-            self.track.append(pm.Message('note_on', note=note, channel=self.channel, velocity=velocity, time=0))
+        offset = int(offset)
+        # notes on
         for i, note in enumerate(notes):
             if i == 0:
-                time = duration
+                time = 0
+            else:
+                time = offset
+            self.track.append(pm.Message('note_on', note=note, channel=self.channel, velocity=velocity, time=time))
+        # notes off
+        for i, note in enumerate(notes):
+            if i == 0:
+                #  time = duration
+                time = duration -  (offset * (len(notes) - 1))
             else:
                 time = 0
             self.track.append(pm.Message('note_off', note=note, channel=self.channel, velocity=127, time=time))
