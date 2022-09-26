@@ -32,6 +32,8 @@ EBCsA = [
         (pm.N.Cs4, 4, C.minor),
         (pm.N.A3, 4, C.major),
         ]
+
+
 def I_V_vis_IV(root):
     I = pm.get_chord_notes(0 + root, C.major)
     V = pm.get_chord_notes(7 + root, C.dominant_7)
@@ -40,12 +42,14 @@ def I_V_vis_IV(root):
 
     return [I, V, vis, IV]
 
+
 def ii_V_i(root):
     ii = pm.get_chord_notes(2 + root, C.minor_7)
     V = pm.get_chord_notes(7 + root, C.dominant_7)
     i = pm.get_chord_notes(0 + root, C.major_7)
 
     return [ii, V, i]
+
 
 def I_vi_ii_V(root):
     I = pm.get_chord_notes(0 + root, C.major_7)
@@ -54,6 +58,7 @@ def I_vi_ii_V(root):
     V = pm.get_chord_notes(7 + root, C.dominant_7)
 
     return [I, vi, ii, V]
+
 
 def i_vi_ii_V(root):
     i = pm.get_chord_notes(0 + root, C.minor_7)

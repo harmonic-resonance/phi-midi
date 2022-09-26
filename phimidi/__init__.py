@@ -10,7 +10,7 @@ from .percussions import *
 from .arps import *
 
 
-def new_midi(title='', tempo=500000):
+def new_midi(title='', tempo=500000) -> MidiFile:
     '''sets up a mido midi file with initial meta track'''
     mf = MidiFile()
 
