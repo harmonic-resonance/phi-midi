@@ -85,7 +85,6 @@ def p5(root):
             pm.get_chord_notes(9 + root, C.minor_7),
             pm.get_chord_notes(7 + root, C.dominant_11),
             pm.get_chord_notes(9 + root, C.minor_11),
-            pm.get_chord_notes(5 + root, C.dominant_9),
             pm.get_chord_notes(0 + root + 12, C.major_7),
             ]
 
