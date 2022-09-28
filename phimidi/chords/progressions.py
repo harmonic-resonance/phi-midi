@@ -62,10 +62,11 @@ def I_vi_ii_V(root: int):
 
 
 def i_vi_ii_V(root):
-    i = pm.get_chord_notes(0 + root, C.minor_7)
-    vi = pm.get_chord_notes(9 + root, C.minor_7)
-    ii = pm.get_chord_notes(2 + root, C.minor_7)
-    V = pm.get_chord_notes(7 + root, C.dominant_7)
+    k = pm.Key(root)
+    i = pm.get_chord_notes(k.I, C.minor_7)
+    vi = pm.get_chord_notes(k.VI, C.minor_7)
+    ii = pm.get_chord_notes(k.II, C.minor_7)
+    V = pm.get_chord_notes(k.V, C.dominant_7)
 
     return [i, vi, ii, V]
 
