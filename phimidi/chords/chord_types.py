@@ -2,6 +2,7 @@
 TODO: alternate voicings
 '''
 major = 'M'
+major_6 = '6'
 major_7 = 'M7'
 dominant_7 = '7'
 dominant_9 = '9'
@@ -18,6 +19,7 @@ sus4 = 'sus4'
 
 CHORDS = {
   'M': [0, 4, 7],
+  '6': [0, 4, 7, 9],
   'M7': [0, 4, 7, 11],
   '7': [0, 4, 7, 10],
   '9': [0, 4, 7, 10, 14],

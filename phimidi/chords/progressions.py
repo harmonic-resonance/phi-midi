@@ -33,6 +33,20 @@ EBCsA = [
         (pm.N.A3, 4, C.major),
         ]
 
+def build_progression(key: pm.Scale, chords: list) -> list:
+    """assemble all notes for chords in the progression
+
+    :key: dict of midi note id for each position in key
+    :chords: list of tuples with ``(pos_name, pos_id, chord_type)``
+    :returns: list
+
+    """
+    progression = []
+    for pos_name, note, chord_type in chords:
+        notes = pm.get_chord_notes(key[note], chord_type)
+        progression.append((pos_name, notes))
+
+    return progression
 
 def I_V_vis_IV(root):
     I = pm.get_chord_notes(0 + root, C.major)
@@ -43,51 +57,46 @@ def I_V_vis_IV(root):
     return [I, V, vis, IV]
 
 
-def ii_V_i(root):
-    ii = pm.get_chord_notes(2 + root, C.minor_7)
-    V = pm.get_chord_notes(7 + root, C.dominant_7)
-    i = pm.get_chord_notes(0 + root, C.major_7)
+def ii_V_I_I(root):
+    key = pm.Scale(root, scale_type=pm.S.major)
+    chords = [
+            ('ii7', 2, C.minor_7),
+            ('V7', 5, C.dominant_7),
+            ('IM7', 1, C.major_7),
+            ('I6', 1, C.major_6),
+            ]
+    return build_progression(key, chords)
 
-    return [ii, V, i]
 
+def ii_V_i_i(root):
+    key = pm.Scale(root, scale_type=pm.S.major)
+    chords = [
+            ('ii7', 2, C.minor_7),
+            ('V7', 5, C.dominant_7),
+            ('i7', 1, C.minor_7),
+            ('i9', 1, C.minor_9),
+            ]
+    return build_progression(key, chords)
 
-def build_progression(key, chords: list):
-    """TODO: Docstring for build_progression.
-
-    :key: TODO
-    :chords: TODO
-    :returns: TODO
-
-    """
-    progression = []
-    for name, (note, chord_type) in chords.items():
-        notes = pm.get_chord_notes(key[note], chord_type)
-        progression.append((name, notes))
-
-    return progression
 
 
 def I_vi_ii_V(root: int):
     key = pm.Scale(root, scale_type=pm.S.major)
-    chords = {
-            'I': (1, C.major_7),
-            'vi': (6, C.minor_7),
-            'ii': (2, C.minor_7),
-            'V': (5, C.dominant_7)
-            }
-
+    chords = [ ('IM7', 1, C.major_7),
+            ('vi7', 6, C.minor_7),
+            ('ii7', 2, C.minor_7),
+            ('V7', 5, C.dominant_7)
+            ]
     return build_progression(key, chords)
 
 
 def i_vi_ii_V(root: int):
     key = pm.Scale(root, scale_type=pm.S.major)
-    chords = {
-            'i': (1, C.minor_7),
-            'vi': (6, C.minor_7),
-            'ii': (2, C.minor_7),
-            'V': (5, C.dominant_7)
-            }
-
+    chords = [ ('i7', 1, C.minor_7),
+            ('vi7', 6, C.minor_7),
+            ('ii7', 2, C.minor_7),
+            ('V7', 5, C.dominant_7)
+            ]
     return build_progression(key, chords)
 
 #  p5 = [
