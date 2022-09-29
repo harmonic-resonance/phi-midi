@@ -51,24 +51,44 @@ def ii_V_i(root):
     return [ii, V, i]
 
 
+def build_progression(key, chords: list):
+    """TODO: Docstring for build_progression.
+
+    :key: TODO
+    :chords: TODO
+    :returns: TODO
+
+    """
+    progression = []
+    for name, (note, chord_type) in chords.items():
+        notes = pm.get_chord_notes(key[note], chord_type)
+        progression.append((name, notes))
+
+    return progression
+
+
 def I_vi_ii_V(root: int):
-    k = pm.Key(root)
-    I = pm.get_chord_notes(k.I, C.major_7)
-    vi = pm.get_chord_notes(k.VI, C.minor_7)
-    ii = pm.get_chord_notes(k.II, C.minor_7)
-    V = pm.get_chord_notes(k.V, C.dominant_7)
+    key = pm.Scale(root, scale_type=pm.S.major)
+    chords = {
+            'I': (1, C.major_7),
+            'vi': (6, C.minor_7),
+            'ii': (2, C.minor_7),
+            'V': (5, C.dominant_7)
+            }
 
-    return [I, vi, ii, V]
+    return build_progression(key, chords)
 
 
-def i_vi_ii_V(root):
-    k = pm.Key(root)
-    i = pm.get_chord_notes(k.I, C.minor_7)
-    vi = pm.get_chord_notes(k.VI, C.minor_7)
-    ii = pm.get_chord_notes(k.II, C.minor_7)
-    V = pm.get_chord_notes(k.V, C.dominant_7)
+def i_vi_ii_V(root: int):
+    key = pm.Scale(root, scale_type=pm.S.major)
+    chords = {
+            'i': (1, C.minor_7),
+            'vi': (6, C.minor_7),
+            'ii': (2, C.minor_7),
+            'V': (5, C.dominant_7)
+            }
 
-    return [i, vi, ii, V]
+    return build_progression(key, chords)
 
 #  p5 = [
         #  (pm.N.C3, 4, C.major),

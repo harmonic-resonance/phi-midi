@@ -12,6 +12,30 @@ def build_scale(root=48, scale_type=S.major, octaves=3):
             notes.append(note)
     return notes
 
+class Scale(dict):
+    #  notes = {}
+    def __init__(self, root, scale_type, octaves=1):
+        """TODO: Docstring for __init__.
+
+        :root: TODO
+        :scale_type: TODO
+        :octaves: TODO
+
+        """
+        pos = 1
+        #  self.notes[pos] = root
+        self[pos] = root
+        self.root = root
+        self.intervals = S.SCALES[scale_type]
+        for octave in range(octaves):
+            jump = 0
+            for interval in self.intervals:
+                jump += interval
+                pos += 1
+                note = (octave * 12) + root + jump
+                self[pos] = note
+
+
 class Key():
     """
     generate classic key offsets for a root note
