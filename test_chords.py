@@ -22,7 +22,7 @@ title = f'{PROJECT} - {NAME}'
 bpm = 120  # beats per minute
 tempo = int(pm.bpm2tempo(bpm))
 
-root = pm.N.D3
+root = pm.N.E3
 octaves = 2
 scale_type = pm.S.major
 
@@ -57,12 +57,15 @@ choir = pm.make_choir_swell(mf)
 # create numpy array for volume steps
 # results in 16 steps
 steps = np.arange(32, 96, 4)
-print(f'steps: {len(steps)}')
-print(steps)
 
-#  chords = pm.progressions.i_vi_ii_V(root)
-chords = pm.progressions.I_vi_ii_V(root)
-chords = pm.progressions.i_vi_ii_V(root)
+#  chords = pm.progressions.I_vi_ii_V(root)
+#  chords.extend(pm.progressions.i_vi_ii_V(root))
+
+chords = pm.progressions.ii_V_I_I(root)
+chords.extend(pm.progressions.ii_V_i_i(root))
+
+log(chords)
+input('paused')
 
 for verse in range(2):
     # each cord is held for 4 measures
@@ -70,39 +73,19 @@ for verse in range(2):
 
         offset = M/32
         #  vibes.set_rest(2 * M)
-        vibes.set_notes(chord, M, offset=offset, velocity=55)
+        #  vibes.set_text(chord_name, M)
+        if verse == 1:
+            vibes.set_notes([note + 12 for note in chord], M, offset=offset, velocity=55)
+        else:
+            vibes.set_notes(chord, M, offset=offset, velocity=55)
+
         strings.set_rest(M / 2)
         strings.set_notes(chord, M / 2, 0)
-
-
-        # strings
-        #  if verse == 0:
-        #  if verse > 0:
-            #  strings.set_rest(4 * M)
-            #  strings.set_notes(chord, 4 * M, M / 8)
-            #  #  strings.set_notes(chord, 2 * M, M / 2)
-        #  else:
-            #  strings.set_rest(measures * M)
-
         #  strings.set_volume(steps[0], 4 * M)
         #  for val in steps:
             #  strings.set_volume(val, M/len(steps))
         #  for val in reversed(steps):
             #  strings.set_volume(val, 3 * M/len(steps))
-
-        #  # solo
-        #  if verse > 2:
-            #  solo.set_rest(M/4)
-            #  solo.set_note(chord[0], 3 * M/4)
-            #  solo.set_note(chord[2], 1 * M/4)
-            #  solo.set_rest(M/4)
-            #  solo.set_note(chord[2], 2 * M/4)
-            #  solo.set_note(chord[1], 1 * M/4)
-            #  solo.set_rest(M/4)
-            #  solo.set_note(chord[0], 1 * M/4)
-            #  solo.set_note(chord[2], 5 * M/4)
-        #  else:
-            #  solo.set_rest(4 * M)
 
 
 
@@ -110,4 +93,4 @@ filepath = pm.save_midi(mf, folder, filename)
 
 subprocess.run(["timidity", '-in', "-c", "~/.photon/timidity.cfg", filepath])
 # save to vorbis ogg
-subprocess.run(["timidity", "-c", "~/.photon/timidity.cfg", filepath, '-Ov'])
+#  subprocess.run(["timidity", "-c", "~/.photon/timidity.cfg", filepath, '-Ov'])

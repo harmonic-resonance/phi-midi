@@ -19,8 +19,15 @@ class Instrument():
         #  self.track_chorus = pm.set_new_track(mf, name=f'{self.name}-chorus')
 
 
+    def set_text(self, text, duration):
+        '''appends  a ``text`` message for the ``duration`` to the Instrument track
+        '''
+        duration = int(duration)
+        self.track.append(pm.MetaMessage('marker', text=text, time=duration))
+
+
     def set_rest(self, duration):
-        '''appends  a `note_off` message for the `duration` to the Instrument track
+        '''appends  a ``note_off`` message for the ``duration`` to the Instrument track
         '''
         duration = int(duration)
         self.track.append(pm.Message('note_off', note=0, channel=self.channel, velocity=127, time=duration))
