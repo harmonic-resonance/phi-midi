@@ -41,7 +41,7 @@ bpM = 4  # beats per Measure
 M = bpM * mf.ticks_per_beat  # ticks per Measure
 
 vibes = pm.make_vibes(mf, 1)
-bass = pm.make_bass(mf, 2)
+#  bass = pm.make_bass(mf, 2)
 #  horns = pm.make_horns(mf, 3)
 strings = pm.make_strings(mf, 4)
 
@@ -51,7 +51,7 @@ strings = pm.make_strings(mf, 4)
 #  tick = pm.make_tick(mf)
 #  hihat_closed = pm.make_hihat_closed(mf)
 
-choir = pm.make_choir_swell(mf)
+#  choir = pm.make_choir_swell(mf)
 #  solo = pm.make_solo_aah(mf)
 
 # create numpy array for volume steps
@@ -61,8 +61,9 @@ steps = np.arange(32, 96, 4)
 #  chords = pm.progressions.I_vi_ii_V(root)
 #  chords.extend(pm.progressions.i_vi_ii_V(root))
 
-chords = pm.progressions.ii_V_I_I(root)
-chords.extend(pm.progressions.ii_V_i_i(root))
+#  chords = pm.progressions.ii_V_I_I(root)
+#  chords.extend(pm.progressions.ii_V_i_i(root))
+chords = pm.progressions.thelio(root)
 
 log(chords)
 input('paused')

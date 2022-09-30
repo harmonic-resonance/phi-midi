@@ -45,10 +45,16 @@ bass = pm.make_bass(mf, 2)
 #  horns = pm.make_horns(mf, 3)
 strings = pm.make_strings(mf, 4)
 
-#  kick = pm.make_kick(mf)
+kick = pm.make_kick(mf)
 #  snare = pm.make_snare(mf)
 #  ride = pm.make_ride(mf)
 #  tick = pm.make_tick(mf)
+low_tom = pm.make_low_tom(mf)
+high_tom = pm.make_high_tom(mf)
+
+ride = high_tom
+tick = low_tom
+
 #  hihat_closed = pm.make_hihat_closed(mf)
 
 choir = pm.make_choir_swell(mf)
@@ -61,27 +67,42 @@ print(f'steps: {len(steps)}')
 print(steps)
 
 #  chords = pm.progressions.i_vi_ii_V(root)
-chords = pm.progressions.p5(root)
+chords = pm.progressions.thelio(root)
 
-for verse in range(1):
+rhythm = pm.patterns.latin.bossa_nova
+
+for verse in range(2):
     # each cord is held for 4 measures
-    for chord_num, chord in enumerate(chords):
+
+    for chord_num, (chord_name, chord) in enumerate(chords):
+        if chord_num == 1:
+            rhythm = pm.patterns.latin.rhumba
+        if chord_num == 2:
+            rhythm = pm.patterns.latin.son_clave
         # bass, horn, drum loops
         # bass, drums fill on 4
         measures = 8
         for m in range(measures):
-            if m == measures - 1:
-                # fill
+            if m == 0:
+                # first
+                bass.set_note(root - 12, M, velocity=90)
+                kick.set_rest(M)
+                ride.set_rest(M)
+                tick.set_hits(M, 4, velocity=30)
+            elif m == measures - 1:
+                # last
                 bass.set_note(root, M, velocity=80)
 
                 # swap ride and snare
                 #  pm.patterns.techno.drum_bass(M, kick, ride, hihat_closed, snare )
                 #  pm.patterns.latin.rhumba(M, ride, tick, kick)
+                rhythm(M, ride, tick, kick, velocity_mod=-30)
             else:
                 bass.set_note(root - 12, M, velocity=90)
 
                 #  pm.patterns.techno.drum_bass(M, kick, snare, hihat_closed, ride)
-                #  pm.patterns.latin.rhumba(M, kick, tick, ride)
+                velocity_mod = -40 if m % 2 else -20
+                rhythm(M, kick, tick, ride, velocity_mod=velocity_mod)
 
         choir.set_rest(M)
         choir.set_volume(steps[0], M)
@@ -128,22 +149,22 @@ for verse in range(1):
             strings.set_volume(val, 3 * M/len(steps))
 
         # solo
-        if verse > 2:
-            solo.set_rest(M/4)
-            solo.set_note(chord[0], 3 * M/4)
-            solo.set_note(chord[2], 1 * M/4)
-            solo.set_rest(M/4)
-            solo.set_note(chord[2], 2 * M/4)
-            solo.set_note(chord[1], 1 * M/4)
-            solo.set_rest(M/4)
-            solo.set_note(chord[0], 1 * M/4)
-            solo.set_note(chord[2], 5 * M/4)
-        else:
-            solo.set_rest(4 * M)
+        #  if verse > 2:
+            #  solo.set_rest(M/4)
+            #  solo.set_note(chord[0], 3 * M/4)
+            #  solo.set_note(chord[2], 1 * M/4)
+            #  solo.set_rest(M/4)
+            #  solo.set_note(chord[2], 2 * M/4)
+            #  solo.set_note(chord[1], 1 * M/4)
+            #  solo.set_rest(M/4)
+            #  solo.set_note(chord[0], 1 * M/4)
+            #  solo.set_note(chord[2], 5 * M/4)
+        #  else:
+            #  solo.set_rest(4 * M)
 
 
 
 filepath = pm.save_midi(mf, folder, filename)
 
 subprocess.run(["timidity", '-in', "-c", "~/.photon/timidity.cfg", filepath])
-subprocess.run(["timidity", '-in', "-c", "~/.photon/timidity.cfg", filepath, '-Ov'])
+subprocess.run(["timidity", "-c", "~/.photon/timidity.cfg", filepath, '-Ov'])

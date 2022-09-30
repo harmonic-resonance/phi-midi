@@ -109,15 +109,24 @@ def i_vi_ii_V(root: int):
         #  (pm.N.C3, 8, C.dominant_13),
         #  ]
 
-def p5(root):
-    chords = [
-            pm.get_chord_notes(0 + root, C.major_7),
-            pm.get_chord_notes(5 + root, C.dominant_9),
-            pm.get_chord_notes(9 + root, C.minor_7),
-            pm.get_chord_notes(7 + root, C.dominant_11),
-            pm.get_chord_notes(9 + root, C.minor_11),
-            pm.get_chord_notes(0 + root + 12, C.major_7),
+def thelio(root):
+    #  chords = [
+            #  pm.get_chord_notes(0 + root, C.major_7),
+            #  pm.get_chord_notes(5 + root, C.dominant_9),
+            #  pm.get_chord_notes(9 + root, C.minor_7),
+            #  pm.get_chord_notes(7 + root, C.dominant_11),
+            #  pm.get_chord_notes(9 + root, C.minor_11),
+            #  pm.get_chord_notes(0 + root + 12, C.major_7),
+            #  ]
+    key = pm.Scale(root, scale_type=pm.S.major)
+    chords = [ ('IM7', 1, C.major_7),
+            ('IV9', 4, C.dominant_9),
+            ('vi7', 6, C.minor_7),
+            ('V11', 5, C.dominant_11),
+            ('vi9', 6, C.minor_9),
+            #  ('ii7', 2, C.minor_7),
+            ('V13', 5, C.dominant_13),
             ]
+    return build_progression(key, chords)
 
-    return chords
 
