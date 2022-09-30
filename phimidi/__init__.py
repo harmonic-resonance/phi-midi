@@ -10,6 +10,66 @@ from .percussions import *
 from .arps import *
 
 
+class Session(MidiFile):
+
+    """Docstring for Session. """
+    free_channels = list(range(16))
+    perc_channel = free_channels.remove(9)
+
+    def __init__(self, title, tempo=500000):
+        """TODO: to be defined.
+
+        :title: TODO
+        :tempo: TODO
+
+        """
+        #  MidiFile.__init__(self)
+        super().__init__()
+
+        self.title = title
+        self.tempo = tempo
+        
+        track = self.add_track(name='meta')
+        if title:
+            track.append(MetaMessage('text', text=title, time=0))
+        track.append(MetaMessage('set_tempo', tempo=tempo, time=0))
+
+    def save(self, folder, filename):
+        import os
+        sessions = os.path.expanduser('~') + '/Sessions'
+        out = f'{sessions}/{folder}/'
+        os.makedirs(out, exist_ok=True)
+        filepath = out + filename
+        super().save(filepath)
+        print(f'    * {filepath}')
+        return filepath
+
+    def add_instrument(self, instrument_type: I) -> Instrument:
+        """add instrument to session
+        set to next available channel
+
+        :instrument_type: TODO
+        :returns: TODO
+
+        """
+        return Instrument(self, instrument_type, channel)
+
+    def add_piano(self, channel):
+        return Instrument(mf, I.acoustic_grand_piano, channel)
+
+    def make_vibes(mf, channel):
+        return Instrument(mf, I.vibraphone, channel)
+
+    def make_bass(mf, channel):
+        return Instrument(mf, I.acoustic_bass, channel)
+
+    def make_horns(mf, channel):
+        return Instrument(mf, I.brass_section, channel)
+
+    def make_strings(mf, channel):
+        return Instrument(mf, I.string_ensemble_1, channel)
+
+
 def new_midi(title='', tempo=500000) -> MidiFile:
     '''sets up a mido midi file with initial meta track'''
     mf = MidiFile()
@@ -27,28 +87,6 @@ def set_new_track(mf, name='', instrument=''):
     return track
 
 
-#  def set_note(track, note=60, channel=0, velocity=64, duration=480):
-    #  duration = int(duration)
-    #  track.append(Message('note_on', note=note, channel=channel, velocity=velocity, time=0))
-    #  track.append(Message('note_off', note=note, channel=channel, velocity=127, time=duration))
-    
-#  def set_note_on(track, note=60, channel=0, velocity=64, duration=480):
-    #  duration = int(duration)
-    #  track.append(Message('note_on', note=note, channel=channel, velocity=velocity, time=0))
-    #  track.append(Message('note_on', note=0, channel=channel, velocity=velocity, time=0))
-    #  track.append(Message('note_off', note=0, channel=channel, velocity=127, time=duration))
-    
-#  def set_chord(track, root=60, chord_type=C.major, channel=0, velocity=64, duration=480):
-    #  duration = int(duration)
-    #  chord = pm.C.CHORDS[chord_type]
-    #  for offset in chord:
-        #  track.append(Message('note_on', note=root+offset, channel=channel, velocity=velocity, time=0))
-    #  for offset in chord:
-        #  if offset == 0:
-            #  time = duration
-        #  else:
-            #  time = 0
-        #  track.append(Message('note_off', note=root+offset, channel=channel, velocity=127, time=time))
     
 def save_midi(mf, folder, filename):
     import os
