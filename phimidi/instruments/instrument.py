@@ -10,21 +10,26 @@ class Instrument():
         self.instrument = inst_id
         self.channel = channel
 
-        self.track = pm.set_new_track(mf, name=self.name)
+        self.track = mf.add_track(name=self.name)
         self.track.append(pm.Message('program_change', channel=channel, program=inst_id, time=0))
 
-        self.track_volume = pm.set_new_track(mf, name=f'{self.name}-volume')
-        self.track_pan = pm.set_new_track(mf, name=f'{self.name}-pan')
+        self.track_volume = mf.add_track(name=f'{self.name}-volume')
+        self.track_pan = mf.add_track(name=f'{self.name}-pan')
         #  self.track_reverb = pm.set_new_track(mf, name=f'{self.name}-reverb')
         #  self.track_chorus = pm.set_new_track(mf, name=f'{self.name}-chorus')
 
 
-    def set_text(self, text, duration):
+    def set_text(self, text, duration=0):
+        '''appends  a ``text`` message for the ``duration`` to the Instrument track
+        '''
+        duration = int(duration)
+        self.track.append(pm.MetaMessage('text', text=text, time=duration))
+
+    def set_marker(self, text, duration=0):
         '''appends  a ``text`` message for the ``duration`` to the Instrument track
         '''
         duration = int(duration)
         self.track.append(pm.MetaMessage('marker', text=text, time=duration))
-
 
     def set_rest(self, duration):
         '''appends  a ``note_off`` message for the ``duration`` to the Instrument track
@@ -32,12 +37,10 @@ class Instrument():
         duration = int(duration)
         self.track.append(pm.Message('note_off', note=0, channel=self.channel, velocity=127, time=duration))
 
-
     def set_note(self, note, duration, velocity=64):
         duration = int(duration)
         self.track.append(pm.Message('note_on', note=note, channel=self.channel, velocity=velocity, time=0))
         self.track.append(pm.Message('note_off', note=note, channel=self.channel, velocity=127, time=duration))
-
 
     def set_notes(self, notes, duration, offset=0, velocity=64):
         duration = int(duration)
@@ -58,7 +61,6 @@ class Instrument():
                 time = 0
             self.track.append(pm.Message('note_off', note=note, channel=self.channel, velocity=127, time=time))
 
-
     def set_chord(self, root, duration, chord_type=pm.C.major, velocity=64):
         duration = int(duration)
         notes = pm.get_chord_notes(root, chord_type)
@@ -72,6 +74,17 @@ class Instrument():
                 #  time = 0
             #  self.track.append(pm.Message('note_off', note=root+offset, channel=self.channel, velocity=127, time=time))
 
+    def ramp_volume_up(self, duration):
+        duration = int(duration)
+        steps = range(32, 96, 4)
+        for val in steps:
+            self.set_volume(val, duration/len(steps))
+
+    def ramp_volume_down(self, duration):
+        duration = int(duration)
+        steps = range(32, 96, 4)
+        for val in reversed(steps):
+            self.set_volume(val, duration/len(steps))
 
     def set_volume(self, level, duration):
         duration = int(duration)

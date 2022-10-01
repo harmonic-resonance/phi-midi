@@ -8,66 +8,9 @@ from .instruments import *
 from .voices import *
 from .percussions import *
 from .arps import *
+from .part import *
 
-
-class Session(MidiFile):
-
-    """Docstring for Session. """
-    free_channels = list(range(16))
-    perc_channel = free_channels.remove(9)
-
-    def __init__(self, title, tempo=500000):
-        """TODO: to be defined.
-
-        :title: TODO
-        :tempo: TODO
-
-        """
-        #  MidiFile.__init__(self)
-        super().__init__()
-
-        self.title = title
-        self.tempo = tempo
-        
-        track = self.add_track(name='meta')
-        if title:
-            track.append(MetaMessage('text', text=title, time=0))
-        track.append(MetaMessage('set_tempo', tempo=tempo, time=0))
-
-    def save(self, folder, filename):
-        import os
-        sessions = os.path.expanduser('~') + '/Sessions'
-        out = f'{sessions}/{folder}/'
-        os.makedirs(out, exist_ok=True)
-        filepath = out + filename
-        super().save(filepath)
-        print(f'    * {filepath}')
-        return filepath
-
-    def add_instrument(self, instrument_type: I) -> Instrument:
-        """add instrument to session
-        set to next available channel
-
-        :instrument_type: TODO
-        :returns: TODO
-
-        """
-        return Instrument(self, instrument_type, channel)
-
-    def add_piano(self, channel):
-        return Instrument(mf, I.acoustic_grand_piano, channel)
-
-    def make_vibes(mf, channel):
-        return Instrument(mf, I.vibraphone, channel)
-
-    def make_bass(mf, channel):
-        return Instrument(mf, I.acoustic_bass, channel)
-
-    def make_horns(mf, channel):
-        return Instrument(mf, I.brass_section, channel)
-
-    def make_strings(mf, channel):
-        return Instrument(mf, I.string_ensemble_1, channel)
+import subprocess
 
 
 def new_midi(title='', tempo=500000) -> MidiFile:
@@ -98,3 +41,11 @@ def save_midi(mf, folder, filename):
     print(f'    * {filepath}')
     return filepath
 
+def play(filepath: str):
+    """TODO: Docstring for play.
+
+    :filepath: TODO
+    :returns: TODO
+
+    """
+    subprocess.run(["timidity", '-in', "-c", "~/.photon/timidity.cfg", filepath])

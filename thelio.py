@@ -3,24 +3,18 @@ script for generating accompaniment for Thelio videos
 :bpm: based on the observed timing of the suspend light
 """
 import phimidi as pm
-import math as math
-import subprocess as subprocess
-import numpy as np
 import itertools as itertools
 import random as random
+from rich import print as log
 
-PROJECT = 'phi-midi'
-NAME = 'thelio'
-#  NAME = 'thelio-corners'
-
-folder = f'{PROJECT}/{NAME}'
-filename = f'{NAME}.mid'
-title = f'{PROJECT} - {NAME}'
-
+PROJECT = 'thelio'
 bpm = 88  # beats per minute
-tempo = int(pm.bpm2tempo(bpm))
+bpM = 4  # beats per Measure
+root = pm.N.D3  # the root note of the key
+key = 'D'
 
-root = pm.N.D3
+part = pm.Part(PROJECT, 'towers', bpm=bpm, root=root, key=key)
+M = bpM * part.ticks_per_beat  # ticks per Measure
 
 #  octaves = 2
 #  scale_type = pm.S.dorian
@@ -34,43 +28,28 @@ root = pm.N.D3
 #  perms = list(itertools.combinations(scale, 4))
 #  random.shuffle(perms)
 
-# create new midi session
-mf = pm.new_midi(title=title, tempo=tempo)
+vibes = part.add_vibes()
+bass = part.add_bass()
+strings = part.add_strings()
 
-bpM = 4  # beats per Measure
-M = bpM * mf.ticks_per_beat  # ticks per Measure
-
-vibes = pm.make_vibes(mf, 1)
-bass = pm.make_bass(mf, 2)
-#  horns = pm.make_horns(mf, 3)
-strings = pm.make_strings(mf, 4)
-
-kick = pm.make_kick(mf)
-#  snare = pm.make_snare(mf)
-#  ride = pm.make_ride(mf)
-#  tick = pm.make_tick(mf)
-low_tom = pm.make_low_tom(mf)
-high_tom = pm.make_high_tom(mf)
+kick = pm.make_kick(part)
+#  snare = pm.make_snare(part)
+#  ride = pm.make_ride(part)
+#  tick = pm.make_tick(part)
+low_tom = pm.make_low_tom(part)
+high_tom = pm.make_high_tom(part)
 
 ride = high_tom
 tick = low_tom
 
-#  hihat_closed = pm.make_hihat_closed(mf)
+choir = part.add_choir_swell()
 
-choir = pm.make_choir_swell(mf)
-#  solo = pm.make_solo_aah(mf)
-
-# create numpy array for volume steps
-# results in 16 steps
-steps = np.arange(32, 96, 4)
-print(f'steps: {len(steps)}')
-print(steps)
-
-#  chords = pm.progressions.i_vi_ii_V(root)
 chords = pm.progressions.thelio(root)
 
 rhythm = pm.patterns.latin.bossa_nova
 
+log(part)
+input('ENTER>')
 for verse in range(2):
     # each cord is held for 4 measures
 
@@ -105,16 +84,11 @@ for verse in range(2):
                 rhythm(M, kick, tick, ride, velocity_mod=velocity_mod)
 
         choir.set_rest(M)
-        choir.set_volume(steps[0], M)
         choir.set_notes(chord, (measures - 1) * M)
-        for val in steps:
-            choir.set_volume(val, 1 * M/len(steps))
+        choir.set_volume(32, M)
+        choir.ramp_volume_up(M)
+        choir.ramp_volume_down((measures - 2) * M)
 
-        for val in reversed(steps):
-            choir.set_volume(val, (measures - 2) * M/len(steps))
-
-        #vibes
-        #  vibes.set_volume(steps[0], 0)
         chord2 = [note + 12 for note in chord]
         chord3 = [note + 12 for note in chord2]
         chord4 = [note + 12 for note in chord3]
@@ -124,14 +98,6 @@ for verse in range(2):
         vibes.set_notes(chord3, M, offset=offset, velocity=55)
         vibes.set_notes(chord4, M/2, offset=offset, velocity=65)
         vibes.set_notes(chord4, 4*M + M/2, offset=offset, velocity=65)
-        #  vibes.set_notes(chord, M/4, velocity=70)
-        #  vibes.set_notes(chord2, M/4, velocity=80)
-        #  #  pm.add_arp_up(vibes, chord, M)
-        #  #  pm.add_arp_down(vibes, chord, M)
-        #  vibes.set_rest(M)
-
-        #  for val in steps:
-            #  vibes.set_volume(val, 4 * M/len(steps))
 
         # strings
         #  if verse == 0:
@@ -142,29 +108,9 @@ for verse in range(2):
         else:
             strings.set_rest(measures * M)
 
-        strings.set_volume(steps[0], 4 * M)
-        for val in steps:
-            strings.set_volume(val, M/len(steps))
-        for val in reversed(steps):
-            strings.set_volume(val, 3 * M/len(steps))
+        strings.set_volume(32, 4 * M)
+        strings.ramp_volume_up(M)
+        strings.ramp_volume_down(3 * M)
 
-        # solo
-        #  if verse > 2:
-            #  solo.set_rest(M/4)
-            #  solo.set_note(chord[0], 3 * M/4)
-            #  solo.set_note(chord[2], 1 * M/4)
-            #  solo.set_rest(M/4)
-            #  solo.set_note(chord[2], 2 * M/4)
-            #  solo.set_note(chord[1], 1 * M/4)
-            #  solo.set_rest(M/4)
-            #  solo.set_note(chord[0], 1 * M/4)
-            #  solo.set_note(chord[2], 5 * M/4)
-        #  else:
-            #  solo.set_rest(4 * M)
-
-
-
-filepath = pm.save_midi(mf, folder, filename)
-
-subprocess.run(["timidity", '-in', "-c", "~/.photon/timidity.cfg", filepath])
-subprocess.run(["timidity", "-c", "~/.photon/timidity.cfg", filepath, '-Ov'])
+part.save()
+part.play()
