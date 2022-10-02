@@ -3,6 +3,7 @@ pyproject.toml
 setup.py
 ./phimidi/__init__.py
 ./phimidi/notes.py
+./phimidi/part.py
 ./phimidi/arps/__init__.py
 ./phimidi/chords/__init__.py
 ./phimidi/chords/chord_types.py
