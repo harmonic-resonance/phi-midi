@@ -7,6 +7,7 @@ import subprocess
 from mido import MidiFile, Message, MetaMessage, bpm2tempo
 from .instruments import Instrument, I
 from .voices import Voice, V
+from .percussions import Percussion, P
 
 class Part(MidiFile):
     """Part object extends the mido MidoFile"""
@@ -86,6 +87,9 @@ class Part(MidiFile):
         instrument = Voice(self, voice_type, channel)
         self.instruments.append(instrument)
         return instrument
+
+    def add_kick(self):
+        return Percussion(self, P.acoustic_bass_drum)
 
     def add_piano(self):
         return self.add_instrument(I.acoustic_grand_piano)
