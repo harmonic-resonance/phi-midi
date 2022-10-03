@@ -13,12 +13,13 @@ class Percussion(Instrument):
         self.instrument = inst_id
         # default midi drum channel is 10 (9 index)
         self.channel = channel
-        
-        self.track = pm.set_new_track(mf, name=self.name)
+
+        self.track = mf.add_track(name=self.name)
         self.track.append(pm.Message('program_change', channel=channel, time=0))
 
-        self.track_volume = pm.set_new_track(mf, name=f'{self.name}-volume')
-        self.track_pan = pm.set_new_track(mf, name=f'{self.name}-pan')
+        # TODO:  set volume and pan for percussion at part level
+        #  self.track_volume = mf.add_track(name=f'{self.name}-volume')
+        #  self.track_pan = mf.add_track(name=f'{self.name}-pan')
 
     def set_hit(self, duration, velocity=64):
         duration = int(duration)

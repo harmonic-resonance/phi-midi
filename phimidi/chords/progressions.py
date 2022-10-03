@@ -110,14 +110,6 @@ def i_vi_ii_V(root: int):
         #  ]
 
 def thelio(root):
-    #  chords = [
-            #  pm.get_chord_notes(0 + root, C.major_7),
-            #  pm.get_chord_notes(5 + root, C.dominant_9),
-            #  pm.get_chord_notes(9 + root, C.minor_7),
-            #  pm.get_chord_notes(7 + root, C.dominant_11),
-            #  pm.get_chord_notes(9 + root, C.minor_11),
-            #  pm.get_chord_notes(0 + root + 12, C.major_7),
-            #  ]
     key = pm.Scale(root, scale_type=pm.S.major)
     chords = [ ('IM7', 1, C.major_7),
             ('IV9', 4, C.dominant_9),
