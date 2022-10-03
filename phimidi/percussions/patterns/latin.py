@@ -1,4 +1,20 @@
+import phimidi as pm
 
+def son_clave2(duration, perc: pm.Percussion, velocity_mod=0):
+    '''3:2 pattern
+    2 measures of eigth notes'''
+    b = int(duration/16)
+    pattern =  '5__3__5_'
+    pattern += '__5_3___'
+    for p in pattern:
+        if p == '_':
+            perc.set_rest(b)
+        else:
+            p = int(p)
+            v = p * 12 + velocity_mod
+            perc.set_hit(b, velocity=v)
+
+    
 def son_clave(length, kick, tick, ride, velocity_mod=0):
     length = int(length)
     b = int(length/16)

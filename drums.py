@@ -39,7 +39,7 @@ kick.set_rest(M)
 snare.set_rest(M)
 hihat_closed.set_rest(M)
 ride.set_rest(M)
-mf.tracks[0].append(pm.MetaMessage('marker', text='count', time=0))
+mf.tracks[0].append(pm.MetaMessage('lyrics', text='count', time=0))
 tick.set_hits(M, 4, velocity=40)
 
 #  ride.set_hit(M)

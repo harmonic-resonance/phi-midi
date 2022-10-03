@@ -41,6 +41,13 @@ class Part(MidiFile):
         track.append(MetaMessage('set_tempo', tempo=self.tempo, time=0))
         track.append(MetaMessage('key_signature', key=self.key, time=0))
 
+    def set_marker(self, text, duration=0):
+        '''appends  a ``marker`` message at ``duration`` to the meta track
+        :duration: offset for placement of marker
+        '''
+        duration = int(duration)
+        self.tracks[0].append(MetaMessage('marker', text=text, time=duration))
+
     def get_mid_path(self) -> Path:
         folder = Path(f'~/Sessions/{self.project}').expanduser()
         folder.mkdir(parents=True, exist_ok=True)

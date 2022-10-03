@@ -25,12 +25,6 @@ class Instrument():
         duration = int(duration)
         self.track.append(pm.MetaMessage('text', text=text, time=duration))
 
-    def set_marker(self, text, duration=0):
-        '''appends  a ``text`` message for the ``duration`` to the Instrument track
-        '''
-        duration = int(duration)
-        self.track.append(pm.MetaMessage('marker', text=text, time=duration))
-
     def set_rest(self, duration):
         '''appends  a ``note_off`` message for the ``duration`` to the Instrument track
         '''
