@@ -32,3 +32,17 @@ class Percussion(Instrument):
             self.track.append(pm.Message('note_on', note=self.instrument, channel=self.channel, velocity=velocity, time=0))
             self.track.append(pm.Message('note_off', note=self.instrument, channel=self.channel, velocity=127, time=duration))
 
+    def add_pattern(self, pattern: str, b: int, velocity_mod: int=0):
+        """TODO: Docstring for add_pattern.
+        :pattern: str with one character for rest or hit
+        :b: int duration for beat
+        :velocity_mod: adjust overall velocity for pattern +/-
+
+        """
+        for p in pattern:
+            if p == '_':
+                self.set_rest(b)
+            else:
+                v = int(p) * 12 + velocity_mod
+                self.set_hit(b, velocity=v)
+

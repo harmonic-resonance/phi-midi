@@ -1,6 +1,6 @@
-import phimidi as pm
+from ..percussion import Percussion
 
-def son_clave2(duration, perc: pm.Percussion, velocity_mod=0):
+def son_clave2(duration, perc: Percussion, velocity_mod=0):
     '''3:2 pattern
     2 measures of eigth notes'''
     b = int(duration/16)

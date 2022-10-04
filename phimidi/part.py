@@ -58,7 +58,7 @@ class Part(MidiFile):
         midi_file = self.get_mid_path()
         filepath = str(midi_file)
         super().save(filepath)
-        print(f'    * {filepath}')
+        #  print(f'    * {filepath}')
         return filepath
     
     def play(self):
