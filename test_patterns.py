@@ -45,23 +45,39 @@ class Conga():
         mute =  '54_454__' + '54___4__'
         # 7 slap - 5 open
         conga = '__7___55' + '__7___55'
-        tumba = '________' + '___77___'
+        tumba = '________' + '___55___'
 
         self.mute_conga.add_pattern(mute, b, velocity_mod=velocity_mod)
         self.conga.add_pattern(conga, b, velocity_mod=velocity_mod)
         self.tumba.add_pattern(tumba, b, velocity_mod=velocity_mod)
 
     def guaguanco(self, duration: int, velocity_mod: int=0):
-        """2 measure tumbao rhythm
+        """2 measure guaguanco rhythm
 
         :duration: TODO
         """
         b = int(duration/16)
         # 5 heel 4 toe 3 touch
         mute =  '___5_3__' + '_____3__'
-        # 7 slap - 5 open
-        conga = '_77___55' + '__7___55'
+        conga = '_77____5' + '5_75___5'
         tumba = '______7_' + '______8_'
+        # 7 slap - 5 open
+
+        self.mute_conga.add_pattern(mute, b, velocity_mod=velocity_mod)
+        self.conga.add_pattern(conga, b, velocity_mod=velocity_mod)
+        self.tumba.add_pattern(tumba, b, velocity_mod=velocity_mod)
+
+    def bolero(self, duration: int, velocity_mod: int=0):
+        """2 measure bolero rhythm
+
+        :duration: TODO
+        """
+        b = int(duration/16)
+        # 5 heel 4 toe 3 touch
+        mute =  '54_454__' + '54_45___'
+        conga = '__7___55' + '__7___5_'
+        tumba = '________' + '_____5_5'
+        # 7 slap - 5 open
 
         self.mute_conga.add_pattern(mute, b, velocity_mod=velocity_mod)
         self.conga.add_pattern(conga, b, velocity_mod=velocity_mod)
@@ -86,19 +102,21 @@ clave.set_hits(M, 4)
 conga.rest_all(M)
 shaker.set_rest(M)
 
-for i in range(4):
-    if i % 2:
-        #  conga.tumbao(2 * M, velocity_mod=-10)
-        conga.tumbao(2 * M)
-        #  conga.guaguanco(2 * M)
-    else:
-        #  conga.tumbao(2 * M)
-        conga.guaguanco(2 * M)
+rhythms = [conga.tumbao, conga.guaguanco, conga.bolero]
+for rhythm in rhythms:
+    for i in range(4):
+        if i % 2:
+            rhythm(2 * M, velocity_mod=-10)
+            #  conga.guaguanco(2 * M)
+        else:
+            rhythm(2 * M)
+            #  conga.tumbao(2 * M)
+            #  conga.guaguanco(2 * M)
 
-    pm.patterns.latin.son_clave2(2 * M, clave)
-    for _ in range(4):
-        shaker.set_hit(M/4, velocity=90)
-        shaker.set_hit(M/4, velocity=60)
+        pm.patterns.latin.son_clave2(2 * M, clave)
+        for _ in range(4):
+            shaker.set_hit(M/4, velocity=90)
+            shaker.set_hit(M/4, velocity=60)
 
 part.save()
 part.play()
