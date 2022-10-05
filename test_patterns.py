@@ -7,6 +7,7 @@ import itertools as itertools
 import random as random
 from rich import print as log
 
+
 PROJECT = 'test_patterns'
 title = 'conga'
 bpm = 180  # beats per minute
