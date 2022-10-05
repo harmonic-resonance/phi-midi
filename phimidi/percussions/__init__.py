@@ -4,6 +4,7 @@ https://docs.google.com/spreadsheets/d/19_3BxUMy3uy1Gb0V8Wc-TcG7q16Amfn6e8QVw4-H
 from . import percussion_types as P
 from . import patterns
 from .percussion import Percussion
+from .kits import *
 
 def make_tick(mf):
     return Percussion(mf, P.side_stick)

@@ -46,7 +46,8 @@ class Part(MidiFile):
         :duration: offset for placement of marker
         '''
         duration = int(duration)
-        self.tracks[0].append(MetaMessage('marker', text=text, time=duration))
+        self.tracks[0].append(MetaMessage('marker', text=text, time=0))
+        self.tracks[0].append(MetaMessage('marker', text='', time=duration))
 
     def get_mid_path(self) -> Path:
         folder = Path(f'~/Sessions/{self.project}').expanduser()
