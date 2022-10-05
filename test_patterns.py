@@ -88,12 +88,12 @@ shaker.set_rest(M)
 
 for i in range(4):
     if i % 2:
-        #  conga.tumbao(2 * M, velocity_mod=-10)
-        conga.tumbao(2 * M)
+        conga.tumbao(2 * M, velocity_mod=-10)
+        #  conga.tumbao(2 * M)
         #  conga.guaguanco(2 * M)
     else:
-        #  conga.tumbao(2 * M)
-        conga.guaguanco(2 * M)
+        conga.tumbao(2 * M)
+        #  conga.guaguanco(2 * M)
 
     pm.patterns.latin.son_clave2(2 * M, clave)
     for _ in range(4):
