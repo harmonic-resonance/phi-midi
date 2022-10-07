@@ -34,12 +34,12 @@ strings = part.add_strings()
 
 kick = pm.make_kick(part)
 #  snare = pm.make_snare(part)
-#  ride = pm.make_ride(part)
+ride = pm.make_ride(part)
 #  tick = pm.make_tick(part)
 low_tom = pm.make_low_tom(part)
 high_tom = pm.make_high_tom(part)
 
-ride = high_tom
+#  ride = high_tom
 tick = low_tom
 
 choir = part.add_choir_swell()

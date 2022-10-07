@@ -17,12 +17,17 @@ class Part(MidiFile):
 
     instruments = []
 
-    def __init__(self, project: str, title: str, bpm: int=120, root: int=60, key: str='C'):
+    def __init__(self, project: str, title: str, 
+            bpm: int=120, bpM: int=4, beat_val: int=4,
+            root: int=60, key: str='C'):
         """TODO: to be defined.
 
         :project: for the session, used to folder
         :title: for the musical part
         :tempo: milliseconds per beat
+        :bpm: int value beats per minute for settings tempo
+        :bpM: int - beats per Measure
+        :beat_val: for time signature
 
         """
         super().__init__()
@@ -37,16 +42,28 @@ class Part(MidiFile):
             track.append(MetaMessage('text', text=f'{project} - {title}', time=0))
 
         self.bpm = int(bpm)
+        self.bpM = int(bpM)
+        self.beat_val = int(beat_val)
         self.tempo = int(bpm2tempo(self.bpm))
         track.append(MetaMessage('set_tempo', tempo=self.tempo, time=0))
         track.append(MetaMessage('key_signature', key=self.key, time=0))
+
+    def measure_ticks(self):
+        """return measure duration in ticks
+        used for setting the ``M`` variable in a composition
+
+        :returns:  int
+
+        """
+        return self.bpM * self.ticks_per_beat
 
     def set_marker(self, text, duration=0):
         '''appends  a ``marker`` message at ``duration`` to the meta track
         :duration: offset for placement of marker
         '''
         duration = int(duration)
-        self.tracks[0].append(MetaMessage('marker', text=text, time=duration))
+        self.tracks[0].append(MetaMessage('marker', text=text, time=0))
+        self.tracks[0].append(MetaMessage('marker', text='', time=duration))
 
     def get_mid_path(self) -> Path:
         folder = Path(f'~/Sessions/{self.project}').expanduser()
@@ -60,7 +77,7 @@ class Part(MidiFile):
         super().save(filepath)
         #  print(f'    * {filepath}')
         return filepath
-    
+
     def play(self):
         """
         this overrides the mido play function

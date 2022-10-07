@@ -7,8 +7,12 @@ def hold_4(dur,  kick, tick, ride):
     kick.set_hits(dur, 2, velocity=60)
     ride.set_hits(dur, 8, velocity=40)
 
-def set_marker(mf, text, dur):
-    mf.tracks[0].append(pm.MetaMessage('marker', text=text, time=dur))
+#  def set_marker(mf, text, dur):
+    #  """
+    #  set marker at zero then blank marker with duration
+    #  """
+    #  mf.tracks[0].append(pm.MetaMessage('marker', text=text, time=0))
+    #  mf.tracks[0].append(pm.MetaMessage('marker', text='', time=dur))
 
 
 PROJECT = 'phi-midi'

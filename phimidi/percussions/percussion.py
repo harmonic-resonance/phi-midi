@@ -42,6 +42,9 @@ class Percussion(Instrument):
         for p in pattern:
             if p == '_':
                 self.set_rest(b)
+            elif p == '-':
+                # TODO: dash to extend duration of previous hit
+                self.set_rest(b)
             else:
                 v = int(p) * 12 + velocity_mod
                 self.set_hit(b, velocity=v)
