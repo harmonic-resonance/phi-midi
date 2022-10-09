@@ -1,5 +1,5 @@
 """
-
+test percusion patterns
 """
 import phimidi as pm
 from rich import print as log
@@ -31,6 +31,7 @@ rhythms = [
         conga.bolero,
         conga.samba,
         ]
+
 for rhythm in rhythms:
     part.set_marker(str(rhythm.__name__), 8*M)
 
