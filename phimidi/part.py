@@ -86,6 +86,14 @@ class Part(MidiFile):
         filepath = str(midi_file)
         subprocess.run(["timidity", '-in', "-c", "~/.photon/timidity.cfg", filepath])
 
+    def convert(self):
+        """
+        this overrides the mido play function
+        """
+        midi_file = self.get_mid_path()
+        filepath = str(midi_file)
+        subprocess.run(["timidity", '-in', "-c", "~/.photon/timidity.cfg", "-Ov", filepath])
+
     def add_instrument(self, instrument_type: I) -> Instrument:
         """add instrument to session
         set to next available channel
