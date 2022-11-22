@@ -14,6 +14,9 @@ setup.py
 ./phimidi/percussions/__init__.py
 ./phimidi/percussions/percussion.py
 ./phimidi/percussions/percussion_types.py
+./phimidi/percussions/kits/__init__.py
+./phimidi/percussions/kits/conga.py
+./phimidi/percussions/kits/kit.py
 ./phimidi/percussions/patterns/__init__.py
 ./phimidi/percussions/patterns/funky.py
 ./phimidi/percussions/patterns/latin.py
