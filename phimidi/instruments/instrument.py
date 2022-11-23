@@ -68,15 +68,15 @@ class Instrument():
                 #  time = 0
             #  self.track.append(pm.Message('note_off', note=root+offset, channel=self.channel, velocity=127, time=time))
 
-    def ramp_volume_up(self, duration):
+    def ramp_volume_up(self, duration, lo=32, hi=96):
         duration = int(duration)
-        steps = range(32, 96, 4)
+        steps = range(lo, hi)
         for val in steps:
             self.set_volume(val, duration/len(steps))
 
-    def ramp_volume_down(self, duration):
+    def ramp_volume_down(self, duration, lo=32, hi=96):
         duration = int(duration)
-        steps = range(32, 96, 4)
+        steps = range(lo, hi)
         for val in reversed(steps):
             self.set_volume(val, duration/len(steps))
 
