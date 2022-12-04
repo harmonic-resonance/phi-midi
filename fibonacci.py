@@ -26,13 +26,18 @@ part = pm.Part(PROJECT, 'music_for_fib', bpm=bpm, root=root, key=key)
 b = part.ticks_per_beat
 M = bpM * part.ticks_per_beat  # ticks per Measure
 
+limit = 377
 limit = 233
 
 scale = reversed(scale)
+
 #  chord = pm.chords.get_chord_notes(pm.N.G3, pm.C.dominant_13)
 #  scale = chord
 
 threshold = 5
+
+#  inst = part.add_choir_swell()
+#  inst.set_note(root, limit * b, velocity=30)
 
 for i, note in enumerate(scale):
 
