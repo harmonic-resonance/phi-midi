@@ -66,9 +66,10 @@ class Part(MidiFile):
         self.tracks[0].append(MetaMessage('marker', text='', time=duration))
 
     def get_mid_path(self) -> Path:
-        folder = Path(f'~/Sessions/{self.project}').expanduser()
-        folder.mkdir(parents=True, exist_ok=True)
-        midi_file = folder / f'{self.title}.mid'
+        #  folder = Path(f'~/Sessions/{self.project}').expanduser()
+        #  folder.mkdir(parents=True, exist_ok=True)
+        #  midi_file = folder / f'{self.title}.mid'
+        midi_file = Path(f'./{self.project}-{self.title}-{self.key}-{self.bpm}.mid')
         return midi_file
 
     def save(self):

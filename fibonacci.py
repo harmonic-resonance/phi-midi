@@ -12,7 +12,8 @@ bpM = 4  # beats per Measure
 key = 'E'
 root = pm.N.E3
 octaves = 2
-scale_type = pm.S.major
+#  scale_type = pm.S.major
+scale_type = pm.S.pentatonic_major
 
 scale = pm.build_scale(
     root=root, 
@@ -27,7 +28,7 @@ b = part.ticks_per_beat
 M = bpM * part.ticks_per_beat  # ticks per Measure
 
 limit = 377
-limit = 233
+#  limit = 233
 
 scale = reversed(scale)
 

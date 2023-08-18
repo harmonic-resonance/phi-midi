@@ -5,11 +5,11 @@ script for generating accompaniment for Thelio videos
 import phimidi as pm
 from rich import print as log
 
-PROJECT = 'thelio'
+PROJECT = "thelio"
 bpm = 88  # beats per minute
 bpM = 4  # beats per Measure
 root = pm.N.D3  # the root note of the key
-key = 'D'
+key = "D"
 
 chords = pm.progressions.thelio(root)
 
@@ -19,10 +19,10 @@ M = part.measure_ticks()
 choir_ooh = part.add_choir_ooh()
 choir_aah = part.add_choir_aah()
 
-choir_ooh.set_notes(chords[0][1], M/2)
-choir_aah.set_rest(M/2)
+choir_ooh.set_notes(chords[0][1], M / 2)
+choir_aah.set_rest(M / 2)
 choir_aah.set_notes(chords[1][1], M)
-choir_ooh.set_rest(M/2)
+choir_ooh.set_rest(M / 2)
 
 part.save()
 part.play()
@@ -45,7 +45,6 @@ for verse in ["button_blink"]:
     tick = pm.make_low_tom(part)
 
     choir = part.add_choir_ooh()
-
 
     for chord_num, (chord_name, chord) in enumerate(chords):
         if chord_num in [0, 3]:
@@ -83,14 +82,14 @@ for verse in ["button_blink"]:
         chord3 = [note + 12 for note in chord2]
         chord4 = [note + 12 for note in chord3]
 
-        offset = M/32
+        offset = M / 32
         vibes.set_rest(2 * M)
         vibes.set_notes(chord3, M, offset=offset, velocity=55)
-        vibes.set_notes(chord4, M/2, offset=offset, velocity=65)
-        vibes.set_notes(chord4, M/2, offset=offset, velocity=65)
+        vibes.set_notes(chord4, M / 2, offset=offset, velocity=65)
+        vibes.set_notes(chord4, M / 2, offset=offset, velocity=65)
 
         # strings
-        if verse == 'corner':
+        if verse == "corner":
             strings.set_rest(4 * M)
             strings.set_notes(chord, 4 * M, M / 8)
             #  strings.set_notes(chord, 2 * M, M / 2)
@@ -104,4 +103,3 @@ for verse in ["button_blink"]:
     part.play()
     part.save()
     part.convert()
-    
