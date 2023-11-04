@@ -22,6 +22,9 @@ folder = f'{PROJECT}/{NAME}'
 filename = f'{NAME}.mid'
 title = f'{PROJECT} - {NAME}'
 
+part = pm.Part(PROJECT, f'01', bpm=bpm, root=root, key=key)
+b = part.ticks_per_beat
+M = bpM * part.ticks_per_beat  # ticks per Measure
 pulse = 120
 tempo = pm.bpm2tempo(pulse)
 mf = pm.new_midi(title=title, tempo=tempo)
@@ -35,7 +38,7 @@ ride = pm.Percussion(mf, pm.P.ride_cymbal_1)
 
 # count
 #  mf.tracks[0].append(pm.MetaMessage('marker', text='count', time=0))
-set_marker(mf, 'count', 0)
+pm.set_marker(mf, 'count', 0)
 kick.set_rest(M)
 #  snare.set_rest(M)
 #  hihat_closed.set_rest(M)
@@ -44,7 +47,7 @@ tick.set_hits(M, 4, velocity=40)
 
 measures = 4
 
-set_marker(mf, 'son_clave', M)
+pm.set_marker(mf, 'son_clave', M)
 for i in range(measures):
     if i < 3:
         pm.patterns.latin.son_clave(M, kick, tick, ride)
@@ -52,7 +55,7 @@ for i in range(measures):
         pm.patterns.latin.son_clave(M, tick, kick, ride)
 hold_4(M, kick, tick, ride)
 
-set_marker(mf, 'bossa_nova', measures * M)
+pm.set_marker(mf, 'bossa_nova', measures * M)
 for i in range(measures):
     if i < 3:
         pm.patterns.latin.bossa_nova(M, kick, tick, ride)
@@ -60,7 +63,7 @@ for i in range(measures):
         pm.patterns.latin.bossa_nova(M, tick, kick, ride)
 hold_4(M, kick, tick, ride)
 
-set_marker(mf, 'rhumba', measures * M)
+pm.set_marker(mf, 'rhumba', measures * M)
 for i in range(measures):
     pm.patterns.latin.rhumba(M, kick, tick, ride)
 hold_4(M, kick, tick, ride)

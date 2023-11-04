@@ -25,7 +25,6 @@ p5 = [
         (pm.N.C3, 8, C.dominant_13),
         ]
 
-
 EBCsA = [
         (pm.N.E4, 4, C.major),
         (pm.N.B3, 4, C.major),
@@ -99,15 +98,6 @@ def i_vi_ii_V(root: int):
             ]
     return build_progression(key, chords)
 
-#  p5 = [
-        #  (pm.N.C3, 4, C.major),
-        #  (pm.N.F3, 4, C.dominant_9),
-        #  (pm.N.A3, 4, C.minor_7),
-        #  (pm.N.G3, 4, C.dominant_11),
-        #  (pm.N.A3, 4, C.minor_11),
-        #  (pm.N.F3, 4, C.dominant_9),
-        #  (pm.N.C3, 8, C.dominant_13),
-        #  ]
 
 def thelio(root):
     key = pm.Scale(root, scale_type=pm.S.major)

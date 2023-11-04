@@ -9,28 +9,30 @@ from rich import print as log
 PROJECT = 'fibonacci'
 bpm = 120  # beats per minute
 bpM = 4  # beats per Measure
-key = 'E'
+key = "E"
 root = pm.N.E3
 octaves = 2
-#  scale_type = pm.S.major
-scale_type = pm.S.pentatonic_major
+scale_type = pm.S.major
+#  scale_type = pm.S.dorian
+
 
 scale = pm.build_scale(
     root=root, 
     scale_type=scale_type, 
     octaves=octaves)
 
+scale = reversed(scale)
+
 F1 = 1
 F2 = 1
 
-part = pm.Part(PROJECT, 'music_for_fib', bpm=bpm, root=root, key=key)
+part = pm.Part(PROJECT, f'01-{scale_type}', bpm=bpm, root=root, key=key)
 b = part.ticks_per_beat
 M = bpM * part.ticks_per_beat  # ticks per Measure
 
 limit = 377
 #  limit = 233
 
-scale = reversed(scale)
 
 #  chord = pm.chords.get_chord_notes(pm.N.G3, pm.C.dominant_13)
 #  scale = chord
@@ -48,6 +50,7 @@ for i, note in enumerate(scale):
         velocity = 60
     else:
         inst = part.add_vibes()
+        #  inst = part.add_bass()
         velocity = 30
 
     for _ in range(int(limit/(F1 + F2))):
@@ -60,7 +63,7 @@ for i, note in enumerate(scale):
 
     F1, F2 = F2, F1 + F2
 
-part.save()
+#  part.save()
 part.play()
-part.convert()
+#  part.convert()
     
