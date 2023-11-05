@@ -22,6 +22,15 @@ folder = f'{PROJECT}/{NAME}'
 filename = f'{NAME}.mid'
 title = f'{PROJECT} - {NAME}'
 
+PROJECT = 'latin'
+title = 'rhythm study'
+bpm = 88  # beats per minute
+bpM = 4  # beats per Measure
+root = pm.N.D3  # the root note of the key
+key = 'D'
+
+part = pm.Part(PROJECT, title, bpm=bpm, root=root, key=key)
+M = bpM * part.ticks_per_beat  # ticks per Measure
 part = pm.Part(PROJECT, f'01', bpm=bpm, root=root, key=key)
 b = part.ticks_per_beat
 M = bpM * part.ticks_per_beat  # ticks per Measure

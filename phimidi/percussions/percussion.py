@@ -1,51 +1,119 @@
 import phimidi as pm
 from ..instruments import Instrument
 
+
 class Percussion(Instrument):
+    """Class for creating MIDI percussion tracks using phimidi.
 
-    """Docstring for Percussion. """
+    The Percussion class inherits from Instrument and allows setting up
+    percussion hits and patterns on the default MIDI drum channel (10 in MIDI
+    convention, but 9 in 0-indexed Python).
+    """
 
-    def __init__(self, mf, inst_id, channel=9):
-        """TODO: to be defined. """
-        #  inst_id = pm.INSTRUMENTS.index(name)
-        self.name = pm.P.PERCUSSIONS[inst_id]
-        # instrument is the note on the drum channel
-        self.instrument = inst_id
-        # default midi drum channel is 10 (9 index)
-        self.channel = channel
+    def __init__(self, midi_file, instrument_id, channel=9):
+        """Initializes a Percussion instance.
 
-        self.track = mf.add_track(name=self.name)
-        self.track.append(pm.Message('program_change', channel=channel, time=0))
+        Args:
+            midi_file (MidiFile): The MIDI file to which this percussion track
+                will be added.
+            instrument_id (int): The ID representing the percussion instrument
+                as per General MIDI level 1 standard.
+            channel (int): The MIDI channel assigned for percussion (usually
+                channel 10, which is 9 in 0-indexed).
+        """
+        self.name = pm.P.PERCUSSIONS[
+            instrument_id
+        ]  # Get the name of the instrument using its ID
+        self.instrument = instrument_id  # Instrument note number on the drum channel
+        self.channel = channel  # MIDI channel for drums
 
-        # TODO:  set volume and pan for percussion at part level
-        #  self.track_volume = mf.add_track(name=f'{self.name}-volume')
-        #  self.track_pan = mf.add_track(name=f'{self.name}-pan')
+        # Create and name a new track for the percussion instrument in the
+        # provided MIDI file
+        self.track = midi_file.add_track(name=self.name)
+        # Set the MIDI program change message to select the correct instrument
+        self.track.append(
+            pm.Message(
+                "program_change", channel=self.channel, program=self.instrument, time=0
+            )
+        )
 
     def set_hit(self, duration, velocity=64):
+        """Sets a single percussion hit.
+
+        Args:
+            duration (int): The duration of the note in MIDI ticks.
+            velocity (int): The velocity (volume) of the note-on message.
+        """
         duration = int(duration)
-        self.track.append(pm.Message('note_on', note=self.instrument, channel=self.channel, velocity=velocity, time=0))
-        self.track.append(pm.Message('note_off', note=self.instrument, channel=self.channel, velocity=127, time=duration))
+        # Note on for the specified instrument and velocity
+        self.track.append(
+            pm.Message(
+                "note_on",
+                note=self.instrument,
+                channel=self.channel,
+                velocity=velocity,
+                time=0,
+            )
+        )
+        # Note off after the specified duration
+        self.track.append(
+            pm.Message(
+                "note_off",
+                note=self.instrument,
+                channel=self.channel,
+                velocity=127,
+                time=duration,
+            )
+        )
 
     def set_hits(self, duration, divisions, velocity=64):
-        duration = int(duration/divisions)
-        for _ in range(divisions):
-            self.track.append(pm.Message('note_on', note=self.instrument, channel=self.channel, velocity=velocity, time=0))
-            self.track.append(pm.Message('note_off', note=self.instrument, channel=self.channel, velocity=127, time=duration))
+        """Sets multiple percussion hits equally spaced within the given duration.
 
-    def add_pattern(self, pattern: str, b: int, velocity_mod: int=0):
-        """TODO: Docstring for add_pattern.
-        :pattern: str with one character for rest or hit
-        :b: int duration for beat
-        :velocity_mod: adjust overall velocity for pattern +/-
-
+        Args:
+            duration (int): The total duration in which the hits are to be placed.
+            divisions (int): The number of hits to be placed within the total duration.
+            velocity (int): The velocity (volume) of each note-on message.
         """
-        for p in pattern:
-            if p == '_':
-                self.set_rest(b)
-            elif p == '-':
-                # TODO: dash to extend duration of previous hit
-                self.set_rest(b)
-            else:
-                v = int(p) * 12 + velocity_mod
-                self.set_hit(b, velocity=v)
+        hit_duration = int(duration / divisions)
+        for _ in range(divisions):
+            self.set_hit(hit_duration, velocity)
 
+    def add_pattern(self, pattern: str, beat_duration: int, velocity_mod: int = 0):
+        """
+        Adds a rhythm pattern to the percussion track.
+
+        Args:
+            pattern (str): String with characters representing hits (numbers)
+                or rests ('_').  A dash ('-') after a hit extends the hit's
+                duration by one beat_duration.
+            beat_duration (int): The duration of one beat in MIDI ticks.
+            velocity_mod (int): Modifier to adjust the overall velocity for the pattern.
+        """
+        index = 0
+        while index < len(pattern):
+            p = pattern[index]
+            if p == "_":
+                # Advance the position for rest
+                self.set_rest(beat_duration)
+                index += 1
+            elif p.isdigit():
+                # Calculate the number of subsequent dashes to extend the
+                # note's duration
+                extension_count = 0
+                look_ahead_index = index + 1
+                while (
+                    look_ahead_index < len(pattern) and pattern[look_ahead_index] == "-"
+                ):
+                    extension_count += 1
+                    look_ahead_index += 1
+
+                total_duration = beat_duration * (1 + extension_count)
+                velocity = int(p) * 12 + velocity_mod
+                self.set_hit(total_duration, velocity=velocity)
+
+                # Skip over the dashes that have been accounted for in the
+                # extended duration
+                index = look_ahead_index
+            else:
+                # For unrecognized characters, simply move to the next character
+                index += 1
